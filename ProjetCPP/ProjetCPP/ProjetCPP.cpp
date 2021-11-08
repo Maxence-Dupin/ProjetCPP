@@ -4,33 +4,63 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
+void RectMovement(sf::RectangleShape& rect, float deltaTime);
+
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "ProjetCPP");
-    // Initialise everything below
-    // Game loop
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            // Process any input event here
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            }
-        }
-        window.clear();
-        // Whatever I want to draw goes here
-        window.display();
-    }
+	sf::RenderWindow window(sf::VideoMode(800, 600), "Ma première fenêtre");
+	window.setVerticalSyncEnabled(true);
 
+	sf::RectangleShape rect(sf::Vector2f(100, 100));
+	rect.setPosition(sf::Vector2f(400.f, 300.f));
+
+	sf::Clock clock;
+
+	while (window.isOpen())
+	{
+		// Inputs
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			switch (event.type)
+			{
+			case sf::Event::Closed:
+				window.close();
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		// Logique
+		sf::Time elapsedTime = clock.restart(); //< Calcul du temps écoulé depuis la dernière boucle
+
+		RectMovement(rect, elapsedTime.asSeconds());
+
+		// Rendu
+		window.clear();
+
+		window.draw(rect);
+
+		window.display();
+	}
 }
 
-// Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage
-// Déboguer le programme : F5 ou menu Déboguer > Démarrer le débogage
+// Gestion des déplacement d'un rectangle
+void RectMovement(sf::RectangleShape& rect, float deltaTime)
+{
+	float speed = 300.f; // 300 pixels par seconde
 
-// Astuces pour bien démarrer : 
-//   1. Utilisez la fenêtre Explorateur de solutions pour ajouter des fichiers et les gérer.
-//   2. Utilisez la fenêtre Team Explorer pour vous connecter au contrôle de code source.
-//   3. Utilisez la fenêtre Sortie pour voir la sortie de la génération et d'autres messages.
-//   4. Utilisez la fenêtre Liste d'erreurs pour voir les erreurs.
-//   5. Accédez à Projet > Ajouter un nouvel élément pour créer des fichiers de code, ou à Projet > Ajouter un élément existant pour ajouter des fichiers de code existants au projet.
-//   6. Pour rouvrir ce projet plus tard, accédez à Fichier > Ouvrir > Projet et sélectionnez le fichier .sln.
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		rect.move(sf::Vector2f(0.f, -speed * deltaTime));
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		rect.move(sf::Vector2f(0.f, speed * deltaTime));
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		rect.move(sf::Vector2f(-speed * deltaTime, 0.f));
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		rect.move(sf::Vector2f(speed * deltaTime, 0.f));
+}
