@@ -8,7 +8,7 @@ void RectMovement(sf::RectangleShape& rect, float deltaTime);
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(800, 600), "Ma première fenêtre");
+	sf::RenderWindow window(sf::VideoMode(800, 600), "Esquivate");
 	window.setVerticalSyncEnabled(true);
 
 	sf::RectangleShape rect(sf::Vector2f(100, 100));
@@ -52,15 +52,15 @@ void RectMovement(sf::RectangleShape& rect, float deltaTime)
 {
 	float speed = 300.f; // 300 pixels par seconde
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
 		rect.move(sf::Vector2f(0.f, -speed * deltaTime));
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		rect.move(sf::Vector2f(0.f, speed * deltaTime));
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 		rect.move(sf::Vector2f(-speed * deltaTime, 0.f));
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		rect.move(sf::Vector2f(speed * deltaTime, 0.f));
 }
