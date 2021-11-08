@@ -6,7 +6,7 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "ChronoSpacer");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "ProjetCPP");
     // Initialise everything below
     // Game loop
     while (window.isOpen()) {
