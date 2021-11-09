@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "EnemieManager.h"
 
 void RectMovement(sf::RectangleShape& rect, float deltaTime);
 
@@ -12,7 +13,7 @@ int main()
 	window.setVerticalSyncEnabled(true);
 
 	sf::RectangleShape rect(sf::Vector2f(100, 100));
-	rect.setPosition(sf::Vector2f(400.f, 300.f));
+	rect.setPosition(sf::Vector2f(350.f, 250.f));
 
 	sf::Clock clock;
 
@@ -37,6 +38,20 @@ int main()
 		sf::Time elapsedTime = clock.restart(); //< Calcul du temps écoulé depuis la dernière boucle
 
 		RectMovement(rect, elapsedTime.asSeconds());
+
+		Enemie test
+		{
+			0,
+			sf::Color::Red,
+			sf::Vector2f(0,0),
+			pos
+			{
+				100,
+				100,
+			}
+		};
+
+		//SpawnAnEnemy(false, test);
 
 		// Rendu
 		window.clear();
