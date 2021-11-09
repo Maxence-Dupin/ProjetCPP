@@ -3,16 +3,21 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "PLayer.h"
 
-void RectMovement(sf::RectangleShape& rect, float deltaTime);
 
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Esquivate");
 	window.setVerticalSyncEnabled(true);
 
-	sf::RectangleShape rect(sf::Vector2f(100, 100));
-	rect.setPosition(sf::Vector2f(400.f, 300.f));
+	Player player{};
+
+	SetUpPlayer(player, 25, 100);
+
+	std::cout << player.speed << std::endl;
+	std::cout << player.pos._x << std::endl;
+	std::cout << player.pos._y << std::endl;
 
 	sf::Clock clock;
 
@@ -36,12 +41,12 @@ int main()
 		// Logique
 		sf::Time elapsedTime = clock.restart(); //< Calcul du temps écoulé depuis la dernière boucle
 
-		RectMovement(rect, elapsedTime.asSeconds());
+		PlayerMouvement(player, elapsedTime.asSeconds());
 
 		// Rendu
 		window.clear();
 
-		window.draw(rect);
+		window.draw(player.circle);
 
 		window.display();
 	}
