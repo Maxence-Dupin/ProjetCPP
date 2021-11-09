@@ -2,7 +2,9 @@
 //
 
 #include <iostream>
+#include <vector>
 #include <SFML/Graphics.hpp>
+#include "Sphere.hpp"
 
 void RectMovement(sf::RectangleShape& rect, float deltaTime);
 
@@ -15,6 +17,19 @@ int main()
 	rect.setPosition(sf::Vector2f(400.f, 300.f));
 
 	sf::Clock clock;
+
+	//spheres manager
+	std::vector<SphereEnnemy> ennemyList;
+
+	for (int i = 0; i < 5; ++i) {
+		float radius = rand() % (60 - 30 + 1) + 30;
+
+		SphereEnnemy ennemy = SphereCreator(radius, 5.0f, sf::Color::Transparent, sf::Color::Red);
+		
+		SphereRenderer(ennemy);
+
+		ennemyList.push_back(ennemy);
+	}
 
 	while (window.isOpen())
 	{
@@ -37,11 +52,19 @@ int main()
 		sf::Time elapsedTime = clock.restart(); //< Calcul du temps écoulé depuis la dernière boucle
 
 		RectMovement(rect, elapsedTime.asSeconds());
+		
+		
+		
 
 		// Rendu
 		window.clear();
 
 		window.draw(rect);
+
+		for (SphereEnnemy oneEnnemy : ennemyList) {
+			window.draw(oneEnnemy.shape);
+			
+		}
 
 		window.display();
 	}
