@@ -48,3 +48,14 @@ void PlayerMouvement(Player& player, float deltaTime)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))//left
 		player.circle.move(sf::Vector2f(speed * deltaTime, 0.f));
 }
+
+void ChangeLife(Player& player, int amout)
+{
+	player.hp += amout;
+}
+
+void ChangeShield(Player& player, int amout)
+{
+	player.shield += amout;
+}
+

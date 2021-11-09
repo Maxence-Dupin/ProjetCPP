@@ -22,7 +22,11 @@ struct Player
 	int shield;
 };
 
-void SetUpPlayer(Player& player, int radius, float speed);
+void SetUpPlayer(Player& player, int radius, float speed, int hp, int shield);
 
 void PlayerMouvement(Player& player, float deltaTime);
+
+void ChangeLife(Player& player, int amout);
+
+void ChangeShield(Player& player, int amout);
 

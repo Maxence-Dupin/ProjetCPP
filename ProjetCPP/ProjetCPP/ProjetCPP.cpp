@@ -13,7 +13,7 @@ int main()
 
 	Player player{};
 
-	SetUpPlayer(player, 25, 100);
+	SetUpPlayer(player, 25, 100, 3, 10);
 
 	std::cout << player.speed << std::endl;
 	std::cout << player.pos._x << std::endl;
