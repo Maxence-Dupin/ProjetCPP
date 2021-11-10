@@ -17,10 +17,6 @@ int main()
 
 	SetUpPlayer(player, 25, 100, 3, 10);
 
-	std::cout << player.speed << std::endl;
-	std::cout << player.pos._x << std::endl;
-	std::cout << player.pos._y << std::endl;
-
 	sf::Clock clock;
 
 	//spheres manager
@@ -57,6 +53,17 @@ int main()
 		sf::Time elapsedTime = clock.restart(); //< Calcul du temps écoulé depuis la dernière boucle
 
 		PlayerMouvement(player, elapsedTime.asSeconds());
+
+		auto it = ennemyList.begin();
+
+		while (it != ennemyList.end()) {
+
+			SphereMovement(*it, elapsedTime.asSeconds());
+			//it->shape.move(Lerp(sf::Vector2f(it->position.posX, it->position.posY), it->direction, elapsedTime.asSeconds()));
+
+			++it;
+		}
+		
 
 		// Rendu
 		window.clear();

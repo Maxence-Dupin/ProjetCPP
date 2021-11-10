@@ -8,8 +8,20 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 
 	sf::CircleShape ennemyShape;
 
-	position.posX = rand() % (750 - 50 + 1) + 50;
-	position.posY = rand() % (550 - 50 + 1) + 50;
+	if (rand() % 2) {
+		position.posX = rand() % (0 - (-50) + 1) + 0;
+	}
+	else {
+		position.posX = rand() % (850 - 800 + 1) + 800;
+	}
+
+	if (rand() % 2) {
+		position.posY = rand() % (0 - (-50) + 1) + 0;
+	}
+	else {
+		position.posY = rand() % (650 - 600 + 1) + 600;
+	}
+
 
 	ennemy.position = position;
 	
@@ -18,6 +30,8 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 	ennemy.outlineThickness = outlineThickness;
 	ennemy.fillColor = fillColor;
 	ennemy.borderColor = borderColor;
+
+	ennemy.direction = sf::Vector2f(rand() % (700 - 100 + 1) + 100, rand() % (500 - 100 + 1) + 100);
 
 	return ennemy;
 }
@@ -28,4 +42,22 @@ void SphereRenderer(SphereEnnemy& ennemy) {
 	ennemy.shape.setOutlineThickness(ennemy.outlineThickness);
 	ennemy.shape.setFillColor(ennemy.fillColor);
 	ennemy.shape.setOutlineColor(ennemy.borderColor);
+}
+
+void SphereMovement(SphereEnnemy& ennemy, float deltaTime) {
+	float directionX = ennemy.direction.x - ennemy.position.posX;
+	float directionY = ennemy.direction.y - ennemy.position.posY;
+
+	int dist = normalized(sf::Vector2f(directionX * deltaTime, directionY * deltaTime));
+
+	ennemy.shape.move(sf::Vector2f(directionX * deltaTime * 3 / dist, directionY * deltaTime * 3 / dist));
+}
+
+int normalized(sf::Vector2f vector) {
+	return sqrt(vector.x * vector.x + vector.y * vector.y);
+}
+
+sf::Vector2f Lerp(sf::Vector2f from, sf::Vector2f to, float t)
+{
+	return from + (to - from) * t;
 }
