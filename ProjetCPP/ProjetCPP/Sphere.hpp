@@ -1,7 +1,6 @@
 #pragma once
 #include<iostream>
 #include<SFML/Graphics.hpp>
-#include "Player.hpp"
 
 struct EnnemyPosition
 {
@@ -9,7 +8,7 @@ struct EnnemyPosition
 	float posY;
 };
 
-struct SphereEnnemy
+struct SphereEnnemy 
 {
 	sf::CircleShape shape;
 	float radius;
@@ -21,4 +20,3 @@ struct SphereEnnemy
 
 SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillColor, sf::Color borderColor);
 void SphereRenderer(SphereEnnemy& ennemy);
-void Collisions(SphereEnnemy& ennemy, Player& player);
