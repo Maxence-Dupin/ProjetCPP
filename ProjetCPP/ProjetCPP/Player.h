@@ -2,7 +2,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-
 struct pos
 {
 	float _x;
@@ -18,15 +17,12 @@ struct Player
 	pos pos;
 
 	float speed;
+	float radius;
 	int hp;
 	int shield;
 };
 
-void SetUpPlayer(Player& player, int radius, float speed, int hp, int shield);
-
 void PlayerMouvement(Player& player, float deltaTime);
-
 void ChangeLife(Player& player, int amout);
-
 void ChangeShield(Player& player, int amout);
-
+void SetUpPlayer(Player& player, float radius, float speed, int hp, int shield);
