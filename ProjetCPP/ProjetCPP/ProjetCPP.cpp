@@ -15,6 +15,8 @@ int main()
 
 	Player player{};
 
+	player.circle.setRadius(50);
+	player.circle.setPosition(350, 250);
 	SetUpPlayer(player, 25, 100, 3, 10);
 
 	std::cout << player.speed << std::endl;
@@ -29,8 +31,12 @@ int main()
 	for (int i = 0; i < 5; ++i) {
 		float radius = rand() % (60 - 30 + 1) + 30;
 
+		std::map<int, SphereEnnemy> enemyList;
+
 		SphereEnnemy ennemy = SphereCreator(radius, 5.0f, sf::Color::Transparent, sf::Color::Red);
-		
+
+		enemyList[i] = ennemy;
+
 		SphereRenderer(ennemy);
 
 		ennemyList.push_back(ennemy);
@@ -57,6 +63,10 @@ int main()
 		sf::Time elapsedTime = clock.restart(); //< Calcul du temps écoulé depuis la dernière boucle
 
 		PlayerMouvement(player, elapsedTime.asSeconds());
+		for (int i = 0; i< ennemyList.size(); i++)
+		{
+			ennemyList[i].shape.move(sf::Vector2f(0.f, -100 * elapsedTime.asSeconds()));
+		}
 
 		// Rendu
 		window.clear();
