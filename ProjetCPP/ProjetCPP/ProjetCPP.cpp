@@ -15,6 +15,10 @@ int main()
 
 	SetUpPlayer(player, 25, 100, 3, 10);
 
+	sf::CircleShape enemie;
+	enemie.setRadius(50);
+	enemie.setFillColor(sf::Color::Red);
+
 	std::cout << player.speed << std::endl;
 	std::cout << player.pos._x << std::endl;
 	std::cout << player.pos._y << std::endl;
@@ -40,6 +44,7 @@ int main()
 
 		// Logique
 		sf::Time elapsedTime = clock.restart(); //< Calcul du temps écoulé depuis la dernière boucle
+		enemie.move(sf::Vector2f(0, 50 * elapsedTime.asSeconds()));
 
 		PlayerMouvement(player, elapsedTime.asSeconds());
 
@@ -47,6 +52,7 @@ int main()
 		window.clear();
 
 		window.draw(player.circle);
+		window.draw(enemie);
 
 		window.display();
 	}
