@@ -1,24 +1,7 @@
+#pragma once
 #include <iostream>
 #include <SFML/Graphics.hpp>
-
-struct pos
-{
-	float _x;
-	float _y;
-};
-
-struct Player
-{
-	sf::CircleShape circle;
-	sf::Color color;
-	float radius;
-
-	pos pos;
-
-	float speed;
-	int hp;
-	int shield;
-};
+#include "Player.hpp"
 
 void SetUpPlayer(Player& player, float radius, float speed, int hp, int shield)
 {
@@ -49,7 +32,7 @@ void PlayerMouvement(Player& player, float deltaTime)
 		player.circle.move(sf::Vector2f(0.f, speed * deltaTime));
 		player.pos._y += speed * deltaTime;
 	}
-		
+
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q))//right
 	{

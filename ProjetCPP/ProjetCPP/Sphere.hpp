@@ -9,7 +9,7 @@ struct EnnemyPosition
 	float posY;
 };
 
-struct SphereEnnemy 
+struct SphereEnnemy
 {
 	sf::CircleShape shape;
 	float radius;
