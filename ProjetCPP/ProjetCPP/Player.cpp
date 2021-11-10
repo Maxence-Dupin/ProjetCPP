@@ -12,6 +12,7 @@ struct Player
 {
 	sf::CircleShape circle;
 	sf::Color color;
+	int radius;
 
 	pos pos;
 
