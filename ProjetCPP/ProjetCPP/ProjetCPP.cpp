@@ -7,15 +7,17 @@
 #include "Sphere.hpp"
 #include "Player.hpp"
 
-
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Esquivate");
 	window.setVerticalSyncEnabled(true);
 
-	Player player{};
 
-	SetUpPlayer(player, 25, 100, 3, 10);
+	Player player;
+	player.pos._x = 400.0f;
+	player.pos._y = 400.0f;
+	player.color = sf::Color::White;
+	SetUpPlayer(player, 50.0f, 100.0f, 3, 10);
 
 	sf::Clock clock;
 
@@ -23,10 +25,10 @@ int main()
 	std::vector<SphereEnnemy> ennemyList;
 
 	for (int i = 0; i < 5; ++i) {
-		float radius = rand() % (60 - 30 + 1) + 30;
+		float radius = static_cast <float> (rand() % (60 - 30 + 1) + 30);
 
 		SphereEnnemy ennemy = SphereCreator(radius, 5.0f, sf::Color::Transparent, sf::Color::Red);
-		
+
 		SphereRenderer(ennemy);
 
 		ennemyList.push_back(ennemy);
@@ -54,6 +56,7 @@ int main()
 
 		PlayerMouvement(player, elapsedTime.asSeconds());
 
+
 		auto it = ennemyList.begin();
 
 		while (it != ennemyList.end()) {
@@ -63,7 +66,11 @@ int main()
 
 			++it;
 		}
-		
+
+		for (SphereEnnemy oneEnnemy : ennemyList)
+		{
+			Collisions(oneEnnemy, player);
+		}
 
 		// Rendu
 		window.clear();
@@ -77,4 +84,3 @@ int main()
 		window.display();
 	}
 }
-
