@@ -29,7 +29,6 @@ void SetUpPlayer(Player& player, float radius, float speed, int hp, int shield)
 	player.circle.setPosition(sf::Vector2f(player.pos._x, player.pos._y));
 	player.circle.setRadius(player.radius);
 	player.circle.setFillColor(player.color);
-	origin/collisions
 }
 
 
