@@ -50,12 +50,15 @@ void SphereMovement(SphereEnnemy& ennemy, float deltaTime) {
 	float directionX = ennemy.direction.x - ennemy.position.posX;
 	float directionY = ennemy.direction.y - ennemy.position.posY;
 
-	int dist = normalized(sf::Vector2f(directionX * deltaTime, directionY * deltaTime));
+	float dist = normalized(sf::Vector2f(directionX * deltaTime, directionY * deltaTime));
 
 	ennemy.shape.move(sf::Vector2f(directionX * deltaTime * 3 / dist, directionY * deltaTime * 3 / dist));
+
+	ennemy.position.posX += directionX * deltaTime * 3 / dist;
+	ennemy.position.posY += directionY * deltaTime * 3 / dist;
 }
 
-int normalized(sf::Vector2f vector) {
+float normalized(sf::Vector2f vector) {
 	return sqrt(vector.x * vector.x + vector.y * vector.y);
 }
 

@@ -18,6 +18,7 @@ struct SphereEnnemy
 	sf::Color fillColor;
 	sf::Color borderColor;
 	sf::Vector2f direction;
+	float dist;
 };
 
 SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillColor, sf::Color borderColor);
@@ -28,7 +29,7 @@ void SphereMovement(SphereEnnemy& ennemy, float deltaTime);
 
 sf::Vector2f Lerp(sf::Vector2f from, sf::Vector2f to, float t);
 
-int normalized(sf::Vector2f vector);
+float normalized(sf::Vector2f vector);
 
 void Collisions(SphereEnnemy& ennemy, Player& player);
 
