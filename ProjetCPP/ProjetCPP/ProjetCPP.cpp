@@ -5,16 +5,18 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "Sphere.hpp"
-
-void RectMovement(sf::RectangleShape& rect, float deltaTime);
+#include "Player.hpp"
 
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Esquivate");
 	window.setVerticalSyncEnabled(true);
 
-	sf::RectangleShape rect(sf::Vector2f(100, 100));
-	rect.setPosition(sf::Vector2f(400.f, 300.f));
+	Player player;
+	player.pos._x = 400;
+	player.pos._y = 400;
+	player.color = sf::Color::White;
+	SetUpPlayer(player, 50.0f, 100.0f, 3, 10);
 
 	sf::Clock clock;
 
@@ -50,40 +52,19 @@ int main()
 
 		// Logique
 		sf::Time elapsedTime = clock.restart(); //< Calcul du temps écoulé depuis la dernière boucle
-
-		RectMovement(rect, elapsedTime.asSeconds());
-		
+		PlayerMouvement(player, elapsedTime.asSeconds());
 		
 		
 
 		// Rendu
 		window.clear();
 
-		window.draw(rect);
+		window.draw(player.circle);
 
 		for (SphereEnnemy oneEnnemy : ennemyList) {
 			window.draw(oneEnnemy.shape);
-			
 		}
 
 		window.display();
 	}
-}
-
-// Gestion des déplacement d'un rectangle
-void RectMovement(sf::RectangleShape& rect, float deltaTime)
-{
-	float speed = 300.f; // 300 pixels par seconde
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
-		rect.move(sf::Vector2f(0.f, -speed * deltaTime));
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		rect.move(sf::Vector2f(0.f, speed * deltaTime));
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-		rect.move(sf::Vector2f(-speed * deltaTime, 0.f));
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		rect.move(sf::Vector2f(speed * deltaTime, 0.f));
 }
