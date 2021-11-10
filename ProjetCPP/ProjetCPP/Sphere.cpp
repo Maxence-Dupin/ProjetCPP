@@ -1,5 +1,5 @@
-#include<iostream>
-#include<SFML/Graphics.hpp>
+#include<iostream>;
+#include<SFML/Graphics.hpp>;
 #include "Sphere.hpp"
 
 SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillColor, sf::Color borderColor) {
