@@ -54,7 +54,6 @@ int main()
 		sf::Time elapsedTime = clock.restart(); //< Calcul du temps écoulé depuis la dernière boucle
 
 		PlayerMouvement(player, elapsedTime.asSeconds());
-		std::cout << player.pos._x << ", " << player.pos._y << std::endl;
 		
 		for (SphereEnnemy oneEnnemy : ennemyList) 
 		{

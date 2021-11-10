@@ -41,14 +41,16 @@ void Collisions(SphereEnnemy& ennemy, Player& player)
 	if (distance < ennemy.radius + ennemy.outlineThickness + player.radius)
 	{
 		std::cout << "collision !" << std::endl;
-		if (player.shield < 0)
+		if (player.shield <= 0)
 		{
 			player.shield = 0;
-			ChangeLife(player, 1);
+			ChangeLife(player, -1);
+			std::cout << player.hp << std::endl;
 		}
 		else
 		{
-			ChangeShield(player, 1);
+			ChangeShield(player, -1);
+			std::cout << player.shield << std::endl;
 		}
 	}
 }
