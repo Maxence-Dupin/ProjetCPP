@@ -21,17 +21,32 @@ void PlayerMouvement(Player& player, float deltaTime)
 	float speed = player.speed; // 300 pixels par seconde
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Z))//up
+	{
 		player.circle.move(sf::Vector2f(0.f, -speed * deltaTime));
+		player.pos._y -= speed * deltaTime;
+	}
 
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))//down
+	{
 		player.circle.move(sf::Vector2f(0.f, speed * deltaTime));
+		player.pos._y += speed * deltaTime;
+	}
+		
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q))//right
+	{
 		player.circle.move(sf::Vector2f(-speed * deltaTime, 0.f));
+		player.pos._x -= speed * deltaTime;
+
+	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))//left
+	{
 		player.circle.move(sf::Vector2f(speed * deltaTime, 0.f));
+		player.pos._x += speed * deltaTime;
+
+	}
 }
 
 void ChangeLife(Player& player, int amout)

@@ -12,6 +12,8 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 	position.posY = rand() % (550 - 50 + 1) + 50;
 
 	ennemy.position = position;
+
+	ennemy.shape.setOrigin(ennemy.position.posX, ennemy.position.posY);
 	
 	ennemy.shape = ennemyShape;
 	ennemy.radius = radius;
@@ -28,4 +30,25 @@ void SphereRenderer(SphereEnnemy& ennemy) {
 	ennemy.shape.setOutlineThickness(ennemy.outlineThickness);
 	ennemy.shape.setFillColor(ennemy.fillColor);
 	ennemy.shape.setOutlineColor(ennemy.borderColor);
+}
+
+void Collisions(SphereEnnemy& ennemy, Player& player)
+{
+	float dx = ennemy.position.posX - player.pos._x + ennemy.radius - player.radius;
+	float dy = ennemy.position.posY - player.pos._y + ennemy.radius - player.radius;
+	float distance = sqrt(dx * dx + dy * dy);
+
+	if (distance < ennemy.radius + ennemy.outlineThickness + player.radius)
+	{
+		std::cout << "collision !" << std::endl;
+		if (player.shield < 0)
+		{
+			player.shield = 0;
+			ChangeLife(player, 1);
+		}
+		else
+		{
+			ChangeShield(player, 1);
+		}
+	}
 }
