@@ -66,6 +66,7 @@ sf::Vector2f Lerp(sf::Vector2f from, sf::Vector2f to, float t)
 {
 	return from + (to - from) * t;
 }
+
 void Collisions(SphereEnnemy& ennemy, Player& player)
 {
 	float dx = ennemy.position.posX - player.pos._x + ennemy.radius - player.radius;
@@ -74,17 +75,25 @@ void Collisions(SphereEnnemy& ennemy, Player& player)
 
 	if (distance < ennemy.radius + ennemy.outlineThickness + player.radius)
 	{
-		std::cout << "collision !" << std::endl;
-		if (player.shield <= 0)
+		player.newHit = (float)clock();
+		if (player.newHit - player.lastHit > player.invincibleTime && player.isInvincible == true)
 		{
-			player.shield = 0;
-			ChangeLife(player, -1);
-			std::cout << player.hp << std::endl;
+			player.isInvincible == false;
+			player.lastHit = player.newHit;
+			if (player.shield <= 0)
+			{
+				player.shield = 0;
+				ChangeLife(player, -1);
+				player.isInvincible == true;
+				std::cout << player.hp << std::endl;
+			}
+			else
+			{
+				ChangeShield(player, -1);
+				player.isInvincible = true;
+				std::cout << player.shield << std::endl;
+			}
 		}
-		else
-		{
-			ChangeShield(player, -1);
-			std::cout << player.shield << std::endl;
-		}
+
 	}
 }
