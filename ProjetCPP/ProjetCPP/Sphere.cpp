@@ -41,7 +41,7 @@ void Collisions(SphereEnnemy& ennemy, Player& player)
 	if (distance < ennemy.radius + ennemy.outlineThickness + player.radius)
 	{
 		player.newHit = (float)clock();
-		if(player.newHit - player.lastHit > 500.0f && player.isInvincible == true)
+		if(player.newHit - player.lastHit > player.invincibleTime && player.isInvincible == true)
 		{
 			player.isInvincible == false;
 			player.lastHit = player.newHit;
