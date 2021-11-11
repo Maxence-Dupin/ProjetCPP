@@ -70,7 +70,6 @@ int main()
 		for (SphereEnnemy oneEnnemy : ennemyList) {
 			window.draw(oneEnnemy.shape);
 		}
-
 		window.display();
 	}
 }
