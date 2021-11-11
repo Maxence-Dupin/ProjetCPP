@@ -9,6 +9,8 @@
 
 int main()
 {
+	srand(time(NULL));
+
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Esquivate");
 	window.setVerticalSyncEnabled(true);
 
@@ -17,21 +19,23 @@ int main()
 	player.pos._x = 400.0f;
 	player.pos._y = 400.0f;
 	player.color = sf::Color::White;
-	SetUpPlayer(player, 50.0f, 100.0f, 3, 10);
+	SetUpPlayer(player, 50.0f, 300.0f, 3, 10);
 
 	sf::Clock clock;
 
 	//spheres manager
 	std::vector<SphereEnnemy> ennemyList;
 
-	for (int i = 0; i < 5; ++i) {
-		float radius = static_cast <float> (rand() % (60 - 30 + 1) + 30);
+	for (int i = 0; i < 3; ++i) {
+			float radius = static_cast <float> (rand() % (30 - 15 + 1) + 15);
 
-		SphereEnnemy ennemy = SphereCreator(radius, 5.0f, sf::Color::Transparent, sf::Color::Red);
+			SphereEnnemy ennemy = SphereCreator(radius, 5.0f, sf::Color::Transparent, sf::Color::Red);
 
-		SphereRenderer(ennemy);
+			SphereMovementDefinition(ennemy, player);
 
-		ennemyList.push_back(ennemy);
+			SphereRenderer(ennemy);
+
+			ennemyList.push_back(ennemy);
 	}
 
 	while (window.isOpen())
@@ -60,14 +64,30 @@ int main()
 		auto it = ennemyList.begin();
 
 		while (it != ennemyList.end()) {
-
-			SphereMovement(*it, elapsedTime.asSeconds());
-			//it->shape.move(Lerp(sf::Vector2f(it->position.posX, it->position.posY), it->direction, elapsedTime.asSeconds()));
+			switch (it->movementType)
+			{
+			case MOVEMENT_TYPE::LINEAR: 
+			case MOVEMENT_TYPE::LINEAR_TO_PLAYER:
+				//mouvement linéaire orientation aléatoire ou vers le joueur
+				SphereLinearMovement(*it, elapsedTime.asSeconds());
+				break;
+			case MOVEMENT_TYPE::ZIGZAG:
+				//mouvement zigzag orientation aléatoire
+				SphereZigZagMovement(*it, elapsedTime.asSeconds());
+				break;
+			case MOVEMENT_TYPE::DASH:
+				//mouvement dash orientation aléatoire
+				SphereDashMovement(*it, player, elapsedTime.asSeconds());
+				break;
+			default:
+				break;
+			}
+			
 
 			++it;
 		}
 
-		for (SphereEnnemy oneEnnemy : ennemyList)
+		for (SphereEnnemy& oneEnnemy : ennemyList)
 		{
 			Collisions(oneEnnemy, player);
 		}
@@ -77,7 +97,7 @@ int main()
 
 		window.draw(player.circle);
 
-		for (SphereEnnemy oneEnnemy : ennemyList) {
+		for (SphereEnnemy& oneEnnemy : ennemyList) {
 			window.draw(oneEnnemy.shape);
 		}
 
