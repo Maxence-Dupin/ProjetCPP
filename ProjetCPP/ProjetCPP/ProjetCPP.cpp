@@ -4,10 +4,12 @@
 #include <iostream>
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include <string>
 #include "Sphere.hpp"
 #include "Player.hpp"
 #include "Wall.h"
 #include "WaveManagement.hpp"
+#include "UI.hpp"
 
 int main()
 {
@@ -27,6 +29,27 @@ int main()
 
 	sf::Clock clock;
 	sf::Clock waveTimer;
+
+
+	// Initialisation des variables sf::Text pour l'UI
+	sf::Font pixelated;
+	pixelated.loadFromFile(getAssetsPath() + "pixelated.ttf");
+	sf::Text hpText;
+	hpText.setPosition(20, 10);
+	auto hpString = std::to_string(player.hp);
+	hpText.setString(hpString + " HP");
+	hpText.setFont(pixelated);
+	sf::Text shieldText;
+	shieldText.setPosition(650, 10);
+	auto shieldString = std::to_string(player.shield);
+	shieldText.setString("SHIELD : " + shieldString);
+	shieldText.setFont(pixelated);
+	sf::Text waveText;
+	waveText.setPosition(320, 10);
+	waveText.setString("WAVE 1");
+	waveText.setFont(pixelated);
+
+
 
 	//wave manager
 	WaveState gameWaveState;
@@ -59,6 +82,10 @@ int main()
 
 		PlayerMouvement(player, elapsedTime.asSeconds());
 		CollisionWithWall(player);
+
+		UpdateHP(player, hpText);
+		UpdateShield(player, shieldText);
+		UpdateWave(gameWaveState.waveNumber, waveText);
 
 
 		//check if sprites are rendered and delete ennemy from vector if needed
@@ -153,6 +180,10 @@ int main()
 		for (SphereEnnemy& oneEnnemy : ennemyList) {
 			window.draw(oneEnnemy.shape);
 		}
+
+		window.draw(hpText);
+		window.draw(shieldText);
+		window.draw(waveText);
 
 		window.display();
 	}
