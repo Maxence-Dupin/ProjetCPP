@@ -11,11 +11,11 @@ void CollisionWithWall(Player& player)
 	if (player.circle.getPosition().y < 0)//top
 		player.circle.setPosition(player.circle.getPosition().x, 0.0f);
 
-	if (player.circle.getPosition().x + player.radius > 800)//right
-		player.circle.setPosition(800.0f - player.radius, player.circle.getPosition().y);
+	if (player.circle.getPosition().x + player.radius*2 > 800)//right
+		player.circle.setPosition(800.0f - player.radius*2, player.circle.getPosition().y);
 
-	if (player.circle.getPosition().y + player.radius > 600)//bottom
-		player.circle.setPosition(player.circle.getPosition().x, 600.0f - player.radius);
+	if (player.circle.getPosition().y + player.radius*2 > 600)//bottom
+		player.circle.setPosition(player.circle.getPosition().x, 600.0f - player.radius*2);
 
 
 }

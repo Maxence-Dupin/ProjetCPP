@@ -6,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include "Sphere.hpp"
 #include "Player.hpp"
+#include "Wall.h"
 
 int main()
 {
@@ -62,6 +63,8 @@ int main()
 		sf::Time elapsedTime = clock.restart(); //< Calcul du temps écoulé depuis la dernière boucle
 
 		PlayerMouvement(player, elapsedTime.asSeconds());
+		CollisionWithWall(player);
+
 
 		//check if sprites are rendered and delete ennemy from vector if needed
 		auto it = ennemyList.begin();
