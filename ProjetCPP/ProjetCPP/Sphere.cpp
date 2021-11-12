@@ -1,5 +1,5 @@
-#include<iostream>;
-#include<SFML/Graphics.hpp>;
+#include <iostream>;
+#include <SFML/Graphics.hpp>;
 #include "Sphere.hpp"
 
 SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillColor, sf::Color borderColor) {
@@ -160,6 +160,8 @@ void SphereBreathingMovement(SphereEnnemy& ennemy, float deltaTime) {
 
 	ennemy.position.posX += ennemy.direction.x * speed * deltaTime;
 	ennemy.position.posY += ennemy.direction.y * speed * deltaTime;
+
+	ennemy.radius += 0.5 * cosf(ennemy.compteur);
 }
 
 bool LeaveScreenManager(SphereEnnemy& ennemy, sf::Vector2f currentPosition) {

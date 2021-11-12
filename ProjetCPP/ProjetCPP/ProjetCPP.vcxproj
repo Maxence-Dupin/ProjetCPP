@@ -154,10 +154,12 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ProjetCPP.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="WaveManagement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h" />
     <ClInclude Include="Sphere.hpp" />
+    <ClInclude Include="WaveManagement.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
