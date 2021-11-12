@@ -9,12 +9,6 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 	sf::CircleShape ennemyShape;
 
 	//d�finition position de d�part
-	/*if (rand() % 2) {
-		position.posX = rand() % (0 - (-150) + 1) + 0;
-	}
-	else {
-		position.posX = rand() % (950 - 800 + 1) + 800;
-	}*/
 	position.posX = rand() % (900 - (-100) + 1) - 100;
 	position.posY = rand() % (700 - (-100) + 1) - 100;
 
@@ -26,7 +20,7 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 		position.posY = rand() % (700 - (-100) + 1) - 100;
 	}
 
-	std::cout << position.posX << " : " << position.posY << std::endl;
+	//std::cout << position.posX << " : " << position.posY << std::endl;
 
 	ennemy.position = position;
 
@@ -103,7 +97,7 @@ void SphereRenderer(SphereEnnemy& ennemy) {
 }
 
 void SphereLinearMovement(SphereEnnemy& ennemy, float deltaTime) {
-	float speed = 200.f;
+	float speed = 300.f;
 
 	ennemy.shape.move(sf::Vector2f(ennemy.direction.x  * speed * deltaTime, ennemy.direction.y * speed * deltaTime ));
 
@@ -138,6 +132,12 @@ void SphereZigZagMovement(SphereEnnemy& ennemy, float deltaTime) {
 
 void SphereDashMovement(SphereEnnemy& ennemy, Player& player, float deltaTime) {
 	float speed = 200.f;
+
+	if (ennemy.changeLeft == 0)
+	{
+		ennemy.borderColor = sf::Color::Green;
+		ennemy.shape.setOutlineColor(ennemy.borderColor);
+	}
 
 	//changement vitesse pour le dash
 	if (ennemy.compteur >= 0 && ennemy.compteur <= 10) 
