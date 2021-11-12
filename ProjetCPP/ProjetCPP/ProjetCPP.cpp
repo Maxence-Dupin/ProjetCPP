@@ -75,7 +75,16 @@ int main()
 			}
 		}
 
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+		{
+			window.close();
+		}
+
 		// Logique
+		if (player.hp <= 0) {
+			window.close();
+		}
+
 		sf::Time waveElapsedTime = waveTimer.getElapsedTime();
 
 		sf::Time elapsedTime = clock.restart(); //< Calcul du temps écoulé depuis la dernière boucle

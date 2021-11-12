@@ -1,6 +1,7 @@
 #include <iostream>;
 #include <SFML/Graphics.hpp>;
 #include "Sphere.hpp"
+#include "WaveManagement.hpp"
 
 SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillColor, sf::Color borderColor) {
 	EnnemyPosition position;
@@ -227,11 +228,15 @@ void Collisions(SphereEnnemy& ennemy, Player& player)
 				player.isInvincible == true;
 				std::cout << player.hp << std::endl;
 			}
-			else
+			else if (player.hp >= 0)
 			{
 				ChangeShield(player, -1);
 				player.isInvincible = true;
 				std::cout << player.shield << std::endl;
+			}
+			else
+			{
+				std::cout << "fin du jeu" << std::endl;
 			}
 		}
 
