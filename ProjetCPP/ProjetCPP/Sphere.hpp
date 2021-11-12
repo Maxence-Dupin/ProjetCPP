@@ -3,6 +3,14 @@
 #include<SFML/Graphics.hpp>
 #include "Player.hpp"
 
+enum MOVEMENT_TYPE {
+	LINEAR,
+	LINEAR_TO_PLAYER,
+	ZIGZAG,
+	DASH,
+	BREATHING,
+};
+
 struct EnnemyPosition
 {
 	float posX;
@@ -18,18 +26,29 @@ struct SphereEnnemy
 	sf::Color fillColor;
 	sf::Color borderColor;
 	sf::Vector2f direction;
-	float dist;
+	float compteur = 0.0f;
+	int changeLeft = 3;
+	bool hasBeenRendered = false;
+	MOVEMENT_TYPE movementType; 
 };
 
 SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillColor, sf::Color borderColor);
 
+void SphereMovementDefinition(SphereEnnemy& ennemy, Player& player);
+
 void SphereRenderer(SphereEnnemy& ennemy);
 
-void SphereMovement(SphereEnnemy& ennemy, float deltaTime);
+void SphereLinearMovement(SphereEnnemy& ennemy, float deltaTime);
 
-sf::Vector2f Lerp(sf::Vector2f from, sf::Vector2f to, float t);
+void SphereZigZagMovement(SphereEnnemy& ennemy, float deltaTime);
 
-float normalized(sf::Vector2f vector);
+void SphereDashMovement(SphereEnnemy& ennemy, Player& player, float deltaTime);
+
+void SphereBreathingMovement(SphereEnnemy& ennemy, float deltaTime);
+
+bool LeaveScreenManager(SphereEnnemy& ennemy, sf::Vector2f currentPosition);
+
+float vecNorme(sf::Vector2f vector);
 
 void Collisions(SphereEnnemy& ennemy, Player& player);
 

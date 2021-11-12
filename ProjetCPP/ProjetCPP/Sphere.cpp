@@ -8,20 +8,22 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 
 	sf::CircleShape ennemyShape;
 
-	if (rand() % 2) {
-		position.posX = rand() % (0 - (-50) + 1) + 0;
+	//d�finition position de d�part
+	/*if (rand() % 2) {
+		position.posX = rand() % (0 - (-150) + 1) + 0;
 	}
 	else {
-		position.posX = rand() % (850 - 800 + 1) + 800;
-	}
+		position.posX = rand() % (950 - 800 + 1) + 800;
+	}*/
+
+	position.posX = rand() % (800 - 1 + 1) + 1;
 
 	if (rand() % 2) {
-		position.posY = rand() % (0 - (-50) + 1) + 0;
+		position.posY = rand() % (0 - (-150) + 1) + 0;
 	}
 	else {
-		position.posY = rand() % (650 - 600 + 1) + 600;
+		position.posY = rand() % (750 - 600 + 1) + 600;
 	}
-
 
 	ennemy.position = position;
 
@@ -33,9 +35,41 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 	ennemy.fillColor = fillColor;
 	ennemy.borderColor = borderColor;
 
-	ennemy.direction = sf::Vector2f(rand() % (700 - 100 + 1) + 100, rand() % (500 - 100 + 1) + 100);
+	//d�finition type de mouvement
+	/*if (rand() % 2) {
+		ennemy.movementType = MOVEMENT_TYPE::DASH;
+	}
+	else {
+		ennemy.movementType = MOVEMENT_TYPE::DASH;
+	}*/
+
+	ennemy.movementType = MOVEMENT_TYPE::BREATHING;
 
 	return ennemy;
+}
+
+void SphereMovementDefinition(SphereEnnemy& ennemy, Player& player) {
+	//d�finition de la direction
+	sf::Vector2f targetPoint;
+
+	switch (ennemy.movementType)
+	{
+	case MOVEMENT_TYPE::LINEAR:
+	case MOVEMENT_TYPE::ZIGZAG:
+	case MOVEMENT_TYPE::BREATHING:
+		targetPoint = sf::Vector2f(rand() % (790 - 10 + 1) + 10, rand() % (590 - 10 + 1) + 10);
+		break;
+	case MOVEMENT_TYPE::LINEAR_TO_PLAYER:
+	case MOVEMENT_TYPE::DASH:
+		targetPoint = player.circle.getPosition();
+		break;
+	default:
+		break;
+	}
+
+	float norme = vecNorme(sf::Vector2f(targetPoint.x - ennemy.position.posX, targetPoint.y - ennemy.position.posY));
+
+	ennemy.direction = sf::Vector2f((targetPoint.x - ennemy.position.posX) / norme, (targetPoint.y - ennemy.position.posY) / norme);
 }
 
 void SphereRenderer(SphereEnnemy& ennemy) {
@@ -46,25 +80,107 @@ void SphereRenderer(SphereEnnemy& ennemy) {
 	ennemy.shape.setOutlineColor(ennemy.borderColor);
 }
 
-void SphereMovement(SphereEnnemy& ennemy, float deltaTime) {
-	float directionX = ennemy.direction.x - ennemy.position.posX;
-	float directionY = ennemy.direction.y - ennemy.position.posY;
+void SphereLinearMovement(SphereEnnemy& ennemy, float deltaTime) {
+	float speed = 200.f;
 
-	float dist = normalized(sf::Vector2f(directionX * deltaTime, directionY * deltaTime));
+	ennemy.shape.move(sf::Vector2f(ennemy.direction.x  * speed * deltaTime, ennemy.direction.y * speed * deltaTime ));
 
-	ennemy.shape.move(sf::Vector2f(directionX * deltaTime * 3 / dist, directionY * deltaTime * 3 / dist));
-
-	ennemy.position.posX += directionX * deltaTime * 3 / dist;
-	ennemy.position.posY += directionY * deltaTime * 3 / dist;
+	ennemy.position.posX += ennemy.direction.x * speed * deltaTime;
+	ennemy.position.posY += ennemy.direction.y * speed * deltaTime;
 }
 
-float normalized(sf::Vector2f vector) {
+void SphereZigZagMovement(SphereEnnemy& ennemy, float deltaTime) {
+	float speed = 200.f;
+
+	if (ennemy.compteur < 40)
+	{
+		ennemy.shape.move(sf::Vector2f(ennemy.direction.x * speed * deltaTime, ennemy.direction.y * speed * deltaTime));
+		++ennemy.compteur;
+
+		ennemy.position.posX += ennemy.direction.x * speed * deltaTime;
+		ennemy.position.posY += ennemy.direction.y * speed * deltaTime;
+	}
+	else if (ennemy.compteur < 80)
+	{
+		++ennemy.compteur;
+		ennemy.shape.move(sf::Vector2f(- ennemy.direction.x * speed * deltaTime, ennemy.direction.y * speed * deltaTime));
+
+		ennemy.position.posX -= ennemy.direction.x * speed * deltaTime;
+		ennemy.position.posY += ennemy.direction.y * speed * deltaTime;
+	}
+	else
+	{
+		ennemy.compteur = 0;
+	}
+}
+
+void SphereDashMovement(SphereEnnemy& ennemy, Player& player, float deltaTime) {
+	float speed = 200.f;
+
+	//changement vitesse pour le dash
+	if (ennemy.compteur >= 0 && ennemy.compteur <= 10) 
+	{
+		speed = 400.f;
+	}
+	else
+	{
+		speed = 200.f;
+	}
+
+	//change de direction vers le player
+	if (ennemy.compteur >= 120 && ennemy.changeLeft > 0)
+	{
+		ennemy.compteur = 0;
+		ennemy.changeLeft--;
+		sf::Vector2f targetPoint = player.circle.getPosition();
+
+		float norme = vecNorme(sf::Vector2f(targetPoint.x - ennemy.position.posX, targetPoint.y - ennemy.position.posY));
+
+		ennemy.direction = sf::Vector2f((targetPoint.x - ennemy.position.posX) / norme, (targetPoint.y - ennemy.position.posY) / norme);
+	}
+	//garde sa trajectoire
+	else 
+	{
+		++ennemy.compteur;
+		ennemy.shape.move(sf::Vector2f(ennemy.direction.x * speed * deltaTime, ennemy.direction.y * speed * deltaTime));
+
+		ennemy.position.posX += ennemy.direction.x * speed * deltaTime;
+		ennemy.position.posY += ennemy.direction.y * speed * deltaTime;
+	}
+
+}
+
+void SphereBreathingMovement(SphereEnnemy& ennemy, float deltaTime) {
+	float speed = 100.f;
+
+	ennemy.compteur += 0.02f;
+	ennemy.shape.move(sf::Vector2f(ennemy.direction.x * speed * deltaTime, ennemy.direction.y * speed * deltaTime));
+
+	ennemy.shape.setRadius(ennemy.shape.getRadius() + 0.5 * cosf(ennemy.compteur));
+
+	ennemy.position.posX += ennemy.direction.x * speed * deltaTime;
+	ennemy.position.posY += ennemy.direction.y * speed * deltaTime;
+}
+
+bool LeaveScreenManager(SphereEnnemy& ennemy, sf::Vector2f currentPosition) {
+	if ((currentPosition.x > -50 && currentPosition.x < 850) && (currentPosition.y > -50 && currentPosition.y < 650))
+	{
+		ennemy.hasBeenRendered = true;
+	}
+	else
+	{
+		if (ennemy.hasBeenRendered)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+float vecNorme(sf::Vector2f vector) {
 	return sqrt(vector.x * vector.x + vector.y * vector.y);
-}
-
-sf::Vector2f Lerp(sf::Vector2f from, sf::Vector2f to, float t)
-{
-	return from + (to - from) * t;
 }
 
 void Collisions(SphereEnnemy& ennemy, Player& player)
