@@ -13,6 +13,7 @@ struct Player
 {
 	sf::CircleShape circle;
 	sf::Color color;
+	sf::Clock clock;
 
 	pos pos;
 
@@ -20,6 +21,10 @@ struct Player
 	float radius;
 	int hp;
 	int shield;
+	bool isInvincible = true;
+	float lastHit = 0.0f;
+	float newHit;
+	float invincibleTime = 500.0f;
 };
 
 void PlayerMouvement(Player& player, float deltaTime);

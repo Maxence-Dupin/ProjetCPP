@@ -8,7 +8,7 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 
 	sf::CircleShape ennemyShape;
 
-	//définition position de départ
+	//dï¿½finition position de dï¿½part
 	/*if (rand() % 2) {
 		position.posX = rand() % (0 - (-150) + 1) + 0;
 	}
@@ -35,7 +35,7 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 	ennemy.fillColor = fillColor;
 	ennemy.borderColor = borderColor;
 
-	//définition type de mouvement
+	//dï¿½finition type de mouvement
 	/*if (rand() % 2) {
 		ennemy.movementType = MOVEMENT_TYPE::DASH;
 	}
@@ -49,7 +49,7 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 }
 
 void SphereMovementDefinition(SphereEnnemy& ennemy, Player& player) {
-	//définition de la direction
+	//dï¿½finition de la direction
 	sf::Vector2f targetPoint;
 
 	switch (ennemy.movementType)
@@ -191,17 +191,25 @@ void Collisions(SphereEnnemy& ennemy, Player& player)
 
 	if (distance < ennemy.radius + ennemy.outlineThickness + player.radius)
 	{
-		std::cout << "collision !" << std::endl;
-		if (player.shield <= 0)
+		player.newHit = (float)clock();
+		if (player.newHit - player.lastHit > player.invincibleTime && player.isInvincible == true)
 		{
-			player.shield = 0;
-			ChangeLife(player, -1);
-			std::cout << player.hp << std::endl;
+			player.isInvincible == false;
+			player.lastHit = player.newHit;
+			if (player.shield <= 0)
+			{
+				player.shield = 0;
+				ChangeLife(player, -1);
+				player.isInvincible == true;
+				std::cout << player.hp << std::endl;
+			}
+			else
+			{
+				ChangeShield(player, -1);
+				player.isInvincible = true;
+				std::cout << player.shield << std::endl;
+			}
 		}
-		else
-		{
-			ChangeShield(player, -1);
-			std::cout << player.shield << std::endl;
-		}
+
 	}
 }
