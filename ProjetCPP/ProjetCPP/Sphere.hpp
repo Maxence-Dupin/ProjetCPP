@@ -8,6 +8,7 @@ enum MOVEMENT_TYPE {
 	LINEAR_TO_PLAYER,
 	ZIGZAG,
 	DASH,
+	BREATHING,
 };
 
 struct EnnemyPosition
@@ -27,6 +28,7 @@ struct SphereEnnemy
 	sf::Vector2f direction;
 	float compteur = 0.0f;
 	int changeLeft = 3;
+	bool hasBeenRendered = false;
 	MOVEMENT_TYPE movementType; 
 };
 
@@ -41,6 +43,10 @@ void SphereLinearMovement(SphereEnnemy& ennemy, float deltaTime);
 void SphereZigZagMovement(SphereEnnemy& ennemy, float deltaTime);
 
 void SphereDashMovement(SphereEnnemy& ennemy, Player& player, float deltaTime);
+
+void SphereBreathingMovement(SphereEnnemy& ennemy, float deltaTime);
+
+bool LeaveScreenManager(SphereEnnemy& ennemy, sf::Vector2f currentPosition);
 
 float vecNorme(sf::Vector2f vector);
 

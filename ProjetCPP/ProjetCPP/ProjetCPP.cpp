@@ -11,6 +11,8 @@ int main()
 {
 	srand(time(NULL));
 
+	bool vagueIsOn = true;
+
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Esquivate");
 	window.setVerticalSyncEnabled(true);
 
@@ -26,7 +28,7 @@ int main()
 	//spheres manager
 	std::vector<SphereEnnemy> ennemyList;
 
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < 1; ++i) {
 			float radius = static_cast <float> (rand() % (30 - 15 + 1) + 15);
 
 			SphereEnnemy ennemy = SphereCreator(radius, 5.0f, sf::Color::Transparent, sf::Color::Red);
@@ -56,12 +58,32 @@ int main()
 		}
 
 		// Logique
+		
 		sf::Time elapsedTime = clock.restart(); //< Calcul du temps écoulé depuis la dernière boucle
 
 		PlayerMouvement(player, elapsedTime.asSeconds());
 
-
+		//check if sprites are rendered and delete ennemy from vector if needed
 		auto it = ennemyList.begin();
+		while (it != ennemyList.end()) {
+			sf::Vector2f currentPosition = it->shape.getPosition();
+			bool canDelete = LeaveScreenManager(*it, currentPosition);
+
+			if (canDelete)
+			{
+				it = ennemyList.erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}
+
+		
+
+
+		//process all movements
+		it = ennemyList.begin();
 
 		while (it != ennemyList.end()) {
 			switch (it->movementType)
@@ -78,6 +100,10 @@ int main()
 			case MOVEMENT_TYPE::DASH:
 				//mouvement dash orientation aléatoire
 				SphereDashMovement(*it, player, elapsedTime.asSeconds());
+				break;
+			case MOVEMENT_TYPE::BREATHING:
+				//mouvement dash orientation aléatoire
+				SphereBreathingMovement(*it, elapsedTime.asSeconds());
 				break;
 			default:
 				break;

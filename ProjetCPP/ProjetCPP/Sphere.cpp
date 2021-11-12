@@ -43,7 +43,7 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 		ennemy.movementType = MOVEMENT_TYPE::DASH;
 	}*/
 
-	ennemy.movementType = MOVEMENT_TYPE::ZIGZAG;
+	ennemy.movementType = MOVEMENT_TYPE::BREATHING;
 
 	return ennemy;
 }
@@ -56,6 +56,7 @@ void SphereMovementDefinition(SphereEnnemy& ennemy, Player& player) {
 	{
 	case MOVEMENT_TYPE::LINEAR:
 	case MOVEMENT_TYPE::ZIGZAG:
+	case MOVEMENT_TYPE::BREATHING:
 		targetPoint = sf::Vector2f(rand() % (790 - 10 + 1) + 10, rand() % (590 - 10 + 1) + 10);
 		break;
 	case MOVEMENT_TYPE::LINEAR_TO_PLAYER:
@@ -147,6 +148,34 @@ void SphereDashMovement(SphereEnnemy& ennemy, Player& player, float deltaTime) {
 		ennemy.position.posY += ennemy.direction.y * speed * deltaTime;
 	}
 
+}
+
+void SphereBreathingMovement(SphereEnnemy& ennemy, float deltaTime) {
+	float speed = 100.f;
+
+	ennemy.compteur += 0.02f;
+	ennemy.shape.move(sf::Vector2f(ennemy.direction.x * speed * deltaTime, ennemy.direction.y * speed * deltaTime));
+
+	ennemy.shape.setRadius(ennemy.shape.getRadius() + 0.5 * cosf(ennemy.compteur));
+
+	ennemy.position.posX += ennemy.direction.x * speed * deltaTime;
+	ennemy.position.posY += ennemy.direction.y * speed * deltaTime;
+}
+
+bool LeaveScreenManager(SphereEnnemy& ennemy, sf::Vector2f currentPosition) {
+	if ((currentPosition.x > -50 && currentPosition.x < 850) && (currentPosition.y > -50 && currentPosition.y < 650))
+	{
+		ennemy.hasBeenRendered = true;
+	}
+	else
+	{
+		if (ennemy.hasBeenRendered)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 
