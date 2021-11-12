@@ -4,20 +4,24 @@
 #include <iostream>
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include <list>
 #include "Sphere.hpp"
 #include "Player.hpp"
+#include "Wall.h"
 
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Esquivate");
 	window.setVerticalSyncEnabled(true);
 
+
 	Player player;
-	player.pos._x = 400.0f;
-	player.pos._y = 400.0f;
+	player.pos._x = 200;
+	player.pos._y = 200;
 	player.color = sf::Color::White;
 	SetUpPlayer(player, 50.0f, 100.0f, 3, 10);
-
+	player.circle.setPosition(200, 200);
+	
 	sf::Clock clock;
 
 	//spheres manager
@@ -54,6 +58,7 @@ int main()
 		sf::Time elapsedTime = clock.restart(); //< Calcul du temps écoulé depuis la dernière boucle
 
 		PlayerMouvement(player, elapsedTime.asSeconds());
+		CollisionWithWall(player);
 
 		for (SphereEnnemy oneEnnemy : ennemyList)
 		{
@@ -70,7 +75,7 @@ int main()
 		for (SphereEnnemy oneEnnemy : ennemyList) {
 			window.draw(oneEnnemy.shape);
 		}
-
+		
 		window.display();
 	}
 }
