@@ -19,7 +19,12 @@ bool LoadNextWave(WaveState& waveState, std::vector<SphereEnnemy>& ennemyList, P
 	}
 
 	waveState.waveNumber += 1;
-	waveState.ennemyNumber += 2;
+
+	if (waveState.ennemyNumber < 15)
+	{
+		waveState.ennemyNumber += 2;
+	}
+	
 	
 	return true;
 }
