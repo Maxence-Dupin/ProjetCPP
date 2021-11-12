@@ -84,11 +84,23 @@ int main()
 			
 		}
 		//load next wave and start it
-		else if (waveElapsedTime.asSeconds() >= gameWaveState.waveWaitTime && gameWaveState.waveRunning == false)
+		else if ((waveElapsedTime.asSeconds() >= gameWaveState.waveWaitTime) && (gameWaveState.waveRunning == false))
 		{
-			waveElapsedTime = waveTimer.restart();
-			std::cout << "debut de vague" << std::endl;
-			gameWaveState.waveRunning = LoadNextWave(gameWaveState, ennemyList, player);
+			if (gameWaveState.waveNumber % 2 == 0 && gameWaveState.bonusTime == false)
+			{
+				waveElapsedTime = waveTimer.restart();
+				gameWaveState.bonusTime = true;
+				std::cout << "bonus time!" << std::endl;
+
+				//gameWaveState.waveRunning = LoadBonusWave(gameWaveState, availableBonusList, player);
+			}
+			else
+			{
+				waveElapsedTime = waveTimer.restart();
+				std::cout << "debut de vague" << std::endl;
+
+				gameWaveState.waveRunning = LoadNextWave(gameWaveState, ennemyList, player);
+			}
 		}
 
 		

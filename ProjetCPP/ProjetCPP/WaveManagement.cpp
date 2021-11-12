@@ -18,6 +18,7 @@ bool LoadNextWave(WaveState& waveState, std::vector<SphereEnnemy>& ennemyList, P
 		ennemyList.push_back(ennemy);
 	}
 
+	waveState.waveNumber += 1;
 	waveState.ennemyNumber += 2;
 	
 	return true;
