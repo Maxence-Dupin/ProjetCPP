@@ -15,15 +15,18 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 	else {
 		position.posX = rand() % (950 - 800 + 1) + 800;
 	}*/
+	position.posX = rand() % (900 - (-100) + 1) - 100;
+	position.posY = rand() % (700 - (-100) + 1) - 100;
 
-	position.posX = rand() % (800 - 1 + 1) + 1;
+	while (position.posX > 0 && position.posX < 800) {
+		position.posX = rand() % (900 - (-100) + 1) - 100;
+	}
 
-	if (rand() % 2) {
-		position.posY = rand() % (0 - (-150) + 1) + 0;
+	while (position.posY > 0 && position.posX < 600) {
+		position.posY = rand() % (700 - (-100) + 1) - 100;
 	}
-	else {
-		position.posY = rand() % (750 - 600 + 1) + 600;
-	}
+
+	std::cout << position.posX << " : " << position.posY << std::endl;
 
 	ennemy.position = position;
 
@@ -76,7 +79,7 @@ void SphereMovementDefinition(SphereEnnemy& ennemy, Player& player) {
 	case MOVEMENT_TYPE::LINEAR:
 	case MOVEMENT_TYPE::ZIGZAG:
 	case MOVEMENT_TYPE::BREATHING:
-		targetPoint = sf::Vector2f(rand() % (790 - 10 + 1) + 10, rand() % (590 - 10 + 1) + 10);
+		targetPoint = sf::Vector2f(rand() % (700 - 100 + 1) + 100, rand() % (500 - 100 + 1) + 100);
 		break;
 	case MOVEMENT_TYPE::LINEAR_TO_PLAYER:
 	case MOVEMENT_TYPE::DASH:
@@ -147,7 +150,7 @@ void SphereDashMovement(SphereEnnemy& ennemy, Player& player, float deltaTime) {
 	}
 
 	//change de direction vers le player
-	if (ennemy.compteur >= 120 && ennemy.changeLeft > 0)
+	if (ennemy.compteur >= 80 && ennemy.changeLeft > 0)
 	{
 		ennemy.compteur = 0;
 		ennemy.changeLeft--;
