@@ -2,7 +2,7 @@
 struct WaveState
 {
 	int ennemyNumber = 3;
-	int waveNumber = 1; 
+	int waveNumber = 0; 
 	bool waveRunning = true;
 	bool bonusTime = true;
 	float waveWaitTime = 2.0f;
