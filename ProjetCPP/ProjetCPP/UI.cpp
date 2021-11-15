@@ -1,6 +1,7 @@
 #include <iostream>;
 #include <SFML/Graphics.hpp>;
-#include  <windows.h>
+#include <windows.h>
+#include <shlwapi.h>
 #include "UI.hpp"
 #include "Player.hpp"
 
@@ -12,6 +13,20 @@ std::string getAssetsPath()
     int exeNamePos = exeFilePath.find_last_of("\\/");
     std::string appPath = exeFilePath.substr(0, exeNamePos + 1);
     std::string assetsPath = appPath + "\Assets\\";
+    return assetsPath;
+}
+
+std::string getAssetsPathFromFolder()
+{
+    char cExeFilePath[256];
+    GetModuleFileNameA(NULL, cExeFilePath, 256);
+    std::string exeFilePath = cExeFilePath;
+    int exeNamePos = exeFilePath.find_last_of("\\/");
+    std::string appPath = exeFilePath.substr(0, exeNamePos);
+    exeNamePos = appPath.find_last_of("\\/");
+    appPath = appPath.substr(0, exeNamePos + 1);
+    std::string assetsPath = appPath + "\Assets\\";
+    std::cout << assetsPath << std::endl;
     return assetsPath;
 }
 

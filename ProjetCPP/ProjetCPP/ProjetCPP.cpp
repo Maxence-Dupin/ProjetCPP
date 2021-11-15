@@ -33,7 +33,7 @@ int main()
 
 	// Initialisation des variables sf::Text pour l'UI
 	sf::Font pixelated;
-	pixelated.loadFromFile(getAssetsPath() + "pixelated.ttf");
+	pixelated.loadFromFile(getAssetsPathFromFolder() + "pixelated.ttf");
 	sf::Text hpText;
 	hpText.setPosition(20, 10);
 	auto hpString = std::to_string(player.hp);
