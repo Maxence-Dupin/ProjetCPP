@@ -25,7 +25,7 @@ int main()
 	player.pos._x = 400.0f;
 	player.pos._y = 400.0f;
 	player.color = sf::Color::White;
-	SetUpPlayer(player, 25.0f, 300.0f, 3, 10);
+	SetUpPlayer(player, 25.0f, 300.0f);
 
 	sf::Clock clock;
 	sf::Clock waveTimer;
@@ -91,10 +91,6 @@ int main()
 
 		PlayerMouvement(player, elapsedTime.asSeconds());
 		CollisionWithWall(player);
-
-		UpdateHP(player, hpText);
-		UpdateShield(player, shieldText);
-		UpdateWave(gameWaveState.waveNumber, waveText);
 
 
 		//check if sprites are rendered and delete ennemy from vector if needed
@@ -175,6 +171,10 @@ int main()
 		}
 
 		// Rendu
+		UpdateHP(player, hpText);
+		UpdateShield(player, shieldText);
+		UpdateWave(gameWaveState.waveNumber, waveText);
+
 		window.clear();
 
 		window.draw(player.circle);

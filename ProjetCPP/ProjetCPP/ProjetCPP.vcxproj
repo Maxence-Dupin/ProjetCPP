@@ -159,8 +159,8 @@
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Player.hpp" />
     <ClInclude Include="UI.hpp" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="Sphere.hpp" />
     <ClInclude Include="WaveManagement.hpp" />
     <ClInclude Include="Wall.h" />

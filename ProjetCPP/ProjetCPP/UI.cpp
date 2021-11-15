@@ -29,6 +29,6 @@ void UpdateShield(Player& player, sf::Text& text)
 
 void UpdateWave(int waveNumber, sf::Text& text)
 {
-    auto waveString = std::to_string(waveNumber - 1);
+    auto waveString = std::to_string(waveNumber);
     text.setString("WAVE  " + waveString);
 }
