@@ -24,11 +24,7 @@ bool LoadNextWave(WaveState& waveState, std::vector<SphereEnnemy>& ennemyList, P
 	{
 		waveState.ennemyNumber += 2;
 	}
-
-	if (waveState.waveNumber % 5 == 0)
-	{
-		player.shield = player.maxShield;
-	}
+	
 	
 	return true;
 }

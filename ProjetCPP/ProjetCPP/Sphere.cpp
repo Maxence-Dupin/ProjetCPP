@@ -1,7 +1,6 @@
 #include <iostream>;
 #include <SFML/Graphics.hpp>;
 #include "Sphere.hpp"
-#include "WaveManagement.hpp"
 
 SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillColor, sf::Color borderColor) {
 	
@@ -36,8 +35,8 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 	ennemy.fillColor = fillColor;
 	ennemy.borderColor = borderColor;
 
-	//d�finition type de mouvement
-	int randomNumber = rand() % 4 + 1;
+	//definition type de mouvement et couleur associee
+	int randomNumber = rand() % 5 + 1;
 
 	switch (randomNumber)
 	{
@@ -49,15 +48,15 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 		ennemy.movementType = MOVEMENT_TYPE::LINEAR_TO_PLAYER;
 		ennemy.borderColor = sf::Color::Green;
 		break;
-	//case 3:
-		//ennemy.movementType = MOVEMENT_TYPE::ZIGZAG;
-		//ennemy.borderColor = sf::Color::Yellow;
-		//break;
 	case 3:
+		ennemy.movementType = MOVEMENT_TYPE::ZIGZAG;
+		ennemy.borderColor = sf::Color::Yellow;
+		break;
+	case 4:
 		ennemy.movementType = MOVEMENT_TYPE::DASH;
 		ennemy.borderColor = sf::Color::Red;
 		break;
-	case 4:
+	case 5:
 		ennemy.movementType = MOVEMENT_TYPE::BREATHING;
 		ennemy.borderColor = sf::Color::White;
 		break;
@@ -140,8 +139,7 @@ void SphereDashMovement(SphereEnnemy& ennemy, Player& player, float deltaTime) {
 
 	if (ennemy.changeLeft == 0)
 	{
-		ennemy.borderColor = sf::Color::Green;
-		ennemy.shape.setOutlineColor(ennemy.borderColor);
+		ennemy.shape.setOutlineColor(sf::Color::Green);
 	}
 
 	//changement vitesse pour le dash
@@ -216,17 +214,11 @@ float vecNorme(sf::Vector2f vector) {
 
 void Collisions(SphereEnnemy& ennemy, Player& player)
 {
-	sf::Vector2f ennemyPos = ennemy.shape.getPosition();
-	float ennemyPosX = ennemyPos.x;
-	float ennemyPosY = ennemyPos.y;
-	sf::Vector2f playerPos = player.circle.getPosition();
-	float playerPosX = playerPos.x;
-	float playerPosY = playerPos.y;
-	float dx = ennemyPosX - playerPosX + ennemy.shape.getRadius() - player.circle.getRadius();
-	float dy = ennemyPosY - playerPosY + ennemy.shape.getRadius() - player.circle.getRadius();
+	float dx = ennemy.position.posX - player.pos._x + ennemy.radius - player.radius;
+	float dy = ennemy.position.posY - player.pos._y + ennemy.radius - player.radius;
 	float distance = sqrt(dx * dx + dy * dy);
 
-	if (distance < ennemy.shape.getRadius() + ennemy.shape.getOutlineThickness() + player.circle.getRadius())
+	if (distance < ennemy.radius + ennemy.outlineThickness + player.radius)
 	{
 		player.newHit = (float)clock();
 		if (player.newHit - player.lastHit > player.invincibleTime && player.isInvincible == true)
@@ -240,15 +232,11 @@ void Collisions(SphereEnnemy& ennemy, Player& player)
 				player.isInvincible == true;
 				std::cout << player.hp << std::endl;
 			}
-			else if (player.hp >= 0)
+			else
 			{
 				ChangeShield(player, -1);
 				player.isInvincible = true;
 				std::cout << player.shield << std::endl;
-			}
-			else
-			{
-				std::cout << "fin du jeu" << std::endl;
 			}
 		}
 

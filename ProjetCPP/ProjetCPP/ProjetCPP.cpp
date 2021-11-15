@@ -4,13 +4,11 @@
 #include <iostream>
 #include <vector>
 #include <SFML/Graphics.hpp>
-#include <string>
 #include "Sphere.hpp"
 #include "Player.hpp"
 #include "Wall.h"
 #include "WaveManagement.hpp"
 #include "BonusManager.hpp"
-#include "UI.hpp"
 
 int main()
 {
@@ -27,31 +25,9 @@ int main()
 	player.pos._y = 400.0f;
 	player.color = sf::Color::White;
 	SetUpPlayer(player, 25.0f, 300.0f, 3, 10);
-	SetUpPlayer(player, 25.0f, 300.0f);
 
 	sf::Clock clock;
 	sf::Clock waveTimer;
-
-
-	// Initialisation des variables sf::Text pour l'UI
-	sf::Font pixelated;
-	pixelated.loadFromFile(getAssetsPathFromRoot() + "pixelated.ttf");
-	sf::Text hpText;
-	hpText.setPosition(20, 10);
-	auto hpString = std::to_string(player.hp);
-	hpText.setString(hpString + " HP");
-	hpText.setFont(pixelated);
-	sf::Text shieldText;
-	shieldText.setPosition(650, 10);
-	auto shieldString = std::to_string(player.shield);
-	shieldText.setString("SHIELD : " + shieldString);
-	shieldText.setFont(pixelated);
-	sf::Text waveText;
-	waveText.setPosition(320, 10);
-	waveText.setString("WAVE 1");
-	waveText.setFont(pixelated);
-
-
 
 	//wave manager
 	WaveState gameWaveState;
@@ -90,16 +66,7 @@ int main()
 			}
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-		{
-			window.close();
-		}
-
 		// Logique
-		if (player.hp <= 0) {
-			window.close();
-		}
-
 		sf::Time waveElapsedTime = waveTimer.getElapsedTime();
 
 		sf::Time elapsedTime = clock.restart(); //< Calcul du temps écoulé depuis la dernière boucle
@@ -136,7 +103,8 @@ int main()
 		//load next wave and start it
 		else if ((waveElapsedTime.asSeconds() >= gameWaveState.waveWaitTime) && (gameWaveState.waveRunning == false))
 		{
-			if ((gameWaveState.waveNumber % 5 == 0) && (gameWaveState.bonusTime) && !hasDrawBonus)
+
+			if ((gameWaveState.waveNumber % 2 == 0) && (gameWaveState.bonusTime) && !hasDrawBonus)
 			{
 				std::map<int, POWER_UP> currentBonus = LoadBonusTime(enumSize);
 				bonusVisu = setUpBonusVisu(currentBonus);
@@ -186,6 +154,7 @@ int main()
 				break;
 			}
 
+
 			++it;
 		}
 
@@ -195,10 +164,6 @@ int main()
 		}
 
 		// Rendu
-		UpdateHP(player, hpText);
-		UpdateShield(player, shieldText);
-		UpdateWave(gameWaveState.waveNumber, waveText);
-
 		window.clear();
 
 		window.draw(player.circle);
@@ -211,10 +176,6 @@ int main()
 		{
 			window.draw(bonusVisu[i]);
 		}		
-
-		window.draw(hpText);
-		window.draw(shieldText);
-		window.draw(waveText);
 
 		window.display();
 	}
