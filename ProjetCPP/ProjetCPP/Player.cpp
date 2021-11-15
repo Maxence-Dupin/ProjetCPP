@@ -3,11 +3,11 @@
 #include <SFML/Graphics.hpp>
 #include "Player.hpp"
 
-void SetUpPlayer(Player& player, float radius, float speed)
+void SetUpPlayer(Player& player, float radius, float speed, int hp, int shield)
 {
 	player.speed = speed;
-	player.hp = player.maxHp;
-	player.shield = player.maxShield;
+	player.hp = hp;
+	player.shield = shield;
 	player.radius = radius;
 	player.circle.setPosition(player.pos._x, player.pos._y);
 	player.circle.setRadius(player.radius);
