@@ -3,18 +3,14 @@
 #include "Sphere.hpp"
 
 SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillColor, sf::Color borderColor) {
+	
+
 	EnnemyPosition position;
 	SphereEnnemy ennemy;
 
 	sf::CircleShape ennemyShape;
 
-	//d�finition position de d�part
-	/*if (rand() % 2) {
-		position.posX = rand() % (0 - (-150) + 1) + 0;
-	}
-	else {
-		position.posX = rand() % (950 - 800 + 1) + 800;
-	}*/
+	//definition position de depart
 	position.posX = rand() % (900 - (-100) + 1) - 100;
 	position.posY = rand() % (700 - (-100) + 1) - 100;
 
@@ -26,10 +22,11 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 		position.posY = rand() % (700 - (-100) + 1) - 100;
 	}
 
-	std::cout << position.posX << " : " << position.posY << std::endl;
+	//std::cout << position.posX << " : " << position.posY << std::endl;
 
 	ennemy.position = position;
 
+	//definition de la shape
 	ennemy.shape.setOrigin(ennemy.position.posX, ennemy.position.posY);
 
 	ennemy.shape = ennemyShape;
@@ -38,7 +35,7 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 	ennemy.fillColor = fillColor;
 	ennemy.borderColor = borderColor;
 
-	//d�finition type de mouvement
+	//definition type de mouvement et couleur associee
 	int randomNumber = rand() % 5 + 1;
 
 	switch (randomNumber)
@@ -71,7 +68,7 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 }
 
 void SphereMovementDefinition(SphereEnnemy& ennemy, Player& player) {
-	//d�finition de la direction
+	//definition de la direction
 	sf::Vector2f targetPoint;
 
 	switch (ennemy.movementType)
@@ -89,6 +86,7 @@ void SphereMovementDefinition(SphereEnnemy& ennemy, Player& player) {
 		break;
 	}
 
+	//normalisation du vecteur direction
 	float norme = vecNorme(sf::Vector2f(targetPoint.x - ennemy.position.posX, targetPoint.y - ennemy.position.posY));
 
 	ennemy.direction = sf::Vector2f((targetPoint.x - ennemy.position.posX) / norme, (targetPoint.y - ennemy.position.posY) / norme);
@@ -103,7 +101,7 @@ void SphereRenderer(SphereEnnemy& ennemy) {
 }
 
 void SphereLinearMovement(SphereEnnemy& ennemy, float deltaTime) {
-	float speed = 200.f;
+	float speed = 300.f;
 
 	ennemy.shape.move(sf::Vector2f(ennemy.direction.x  * speed * deltaTime, ennemy.direction.y * speed * deltaTime ));
 
@@ -139,6 +137,11 @@ void SphereZigZagMovement(SphereEnnemy& ennemy, float deltaTime) {
 void SphereDashMovement(SphereEnnemy& ennemy, Player& player, float deltaTime) {
 	float speed = 200.f;
 
+	if (ennemy.changeLeft == 0)
+	{
+		ennemy.shape.setOutlineColor(sf::Color::Green);
+	}
+
 	//changement vitesse pour le dash
 	if (ennemy.compteur >= 0 && ennemy.compteur <= 10) 
 	{
@@ -170,6 +173,8 @@ void SphereDashMovement(SphereEnnemy& ennemy, Player& player, float deltaTime) {
 		ennemy.position.posY += ennemy.direction.y * speed * deltaTime;
 	}
 
+
+
 }
 
 void SphereBreathingMovement(SphereEnnemy& ennemy, float deltaTime) {
@@ -183,7 +188,7 @@ void SphereBreathingMovement(SphereEnnemy& ennemy, float deltaTime) {
 	ennemy.position.posX += ennemy.direction.x * speed * deltaTime;
 	ennemy.position.posY += ennemy.direction.y * speed * deltaTime;
 
-	ennemy.radius += 0.5 * cosf(ennemy.compteur);
+	ennemy.radius = ennemy.shape.getRadius();
 }
 
 bool LeaveScreenManager(SphereEnnemy& ennemy, sf::Vector2f currentPosition) {

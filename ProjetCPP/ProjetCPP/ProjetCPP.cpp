@@ -8,6 +8,7 @@
 #include "Player.hpp"
 #include "Wall.h"
 #include "WaveManagement.hpp"
+#include "BonusManager.hpp"
 
 int main()
 {
@@ -23,7 +24,7 @@ int main()
 	player.pos._x = 400.0f;
 	player.pos._y = 400.0f;
 	player.color = sf::Color::White;
-	SetUpPlayer(player, 50.0f, 300.0f, 3, 10);
+	SetUpPlayer(player, 25.0f, 300.0f, 3, 10);
 
 	sf::Clock clock;
 	sf::Clock waveTimer;
@@ -89,21 +90,22 @@ int main()
 		//load next wave and start it
 		else if ((waveElapsedTime.asSeconds() >= gameWaveState.waveWaitTime) && (gameWaveState.waveRunning == false))
 		{
-			if (gameWaveState.waveNumber % 2 == 0 && gameWaveState.bonusTime == false)
-			{
-				waveElapsedTime = waveTimer.restart();
-				gameWaveState.bonusTime = true;
-				std::cout << "bonus time!" << std::endl;
+				if ((gameWaveState.waveNumber % 2 == 0) && (gameWaveState.bonusTime))
+				{
+					gameWaveState.bonusTime == false;
 
-				//gameWaveState.waveRunning = LoadBonusWave(gameWaveState, availableBonusList, player);
-			}
-			else
-			{
-				waveElapsedTime = waveTimer.restart();
-				std::cout << "debut de vague" << std::endl;
+					waveElapsedTime = waveTimer.restart();
+					std::cout << "bonus time!" << std::endl;
 
-				gameWaveState.waveRunning = LoadNextWave(gameWaveState, ennemyList, player);
-			}
+					LoadBonusTime(enumSize);
+				}
+				else
+				{
+					waveElapsedTime = waveTimer.restart();
+					std::cout << "debut de vague" << std::endl;
+
+					gameWaveState.waveRunning = LoadNextWave(gameWaveState, ennemyList, player);
+				}
 		}
 
 
