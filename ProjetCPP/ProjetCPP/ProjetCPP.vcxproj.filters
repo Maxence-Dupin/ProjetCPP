@@ -30,14 +30,14 @@
     <ClCompile Include="Wall.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="UI.cpp">
-      <Filter>Fichiers sources</Filter>
     <ClCompile Include="BonusManager.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Player.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
     <ClInclude Include="Sphere.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -45,12 +45,6 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Wall.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="UI.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="BonusManager.hpp">
