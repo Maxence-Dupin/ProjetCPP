@@ -36,6 +36,10 @@ int main()
 
 	LoadNextWave(gameWaveState, ennemyList, player);
 
+	std::map<int, sf::RectangleShape> bonusVisu;
+	bool hasChooseBonus = true;
+	bool hasDrawBonus = false;
+
 	while (window.isOpen())
 	{
 		// Inputs
@@ -47,7 +51,16 @@ int main()
 			case sf::Event::Closed:
 				window.close();
 				break;
-
+			case sf::Event::MouseButtonPressed:
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				{
+					while (hasChooseBonus == false)
+					{
+						sf::Vector2f clickPos = sf::Vector2f(event.mouseButton.x, event.mouseButton.y);
+						hasChooseBonus = buttonPressed(clickPos, bonusVisu, player);
+					}
+					bonusVisu.clear();
+				}
 			default:
 				break;
 			}
@@ -90,26 +103,29 @@ int main()
 		//load next wave and start it
 		else if ((waveElapsedTime.asSeconds() >= gameWaveState.waveWaitTime) && (gameWaveState.waveRunning == false))
 		{
-				if ((gameWaveState.waveNumber % 2 == 0) && (gameWaveState.bonusTime))
-				{
-					gameWaveState.bonusTime == false;
 
-					waveElapsedTime = waveTimer.restart();
-					std::cout << "bonus time!" << std::endl;
+			if ((gameWaveState.waveNumber % 2 == 0) && (gameWaveState.bonusTime) && !hasDrawBonus)
+			{
+				std::map<int, POWER_UP> currentBonus = LoadBonusTime(enumSize);
+				bonusVisu = setUpBonusVisu(currentBonus);
+				hasDrawBonus = true;
+				hasChooseBonus = false;
+					
+				gameWaveState.bonusTime == false;
 
-					LoadBonusTime(enumSize);
-				}
-				else
-				{
-					waveElapsedTime = waveTimer.restart();
-					std::cout << "debut de vague" << std::endl;
+				waveElapsedTime = waveTimer.restart();
+				std::cout << "bonus time!" << std::endl;
+			}
+			else if (hasChooseBonus)
+			{
+				waveElapsedTime = waveTimer.restart();
+				std::cout << "debut de vague" << std::endl;
 
-					gameWaveState.waveRunning = LoadNextWave(gameWaveState, ennemyList, player);
-				}
+				hasDrawBonus = false;
+
+				gameWaveState.waveRunning = LoadNextWave(gameWaveState, ennemyList, player);
+			}
 		}
-
-
-
 
 		//process all movements
 		it = ennemyList.begin();
@@ -155,6 +171,11 @@ int main()
 		for (SphereEnnemy& oneEnnemy : ennemyList) {
 			window.draw(oneEnnemy.shape);
 		}
+
+		for (int i = 0; i < bonusVisu.size(); i++)
+		{
+			window.draw(bonusVisu[i]);
+		}		
 
 		window.display();
 	}
