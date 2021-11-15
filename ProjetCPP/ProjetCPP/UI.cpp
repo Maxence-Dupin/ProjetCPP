@@ -16,7 +16,7 @@ std::string getAssetsPath()
     return assetsPath;
 }
 
-std::string getAssetsPathFromFolder()
+std::string getAssetsPathFromRoot()
 {
     char cExeFilePath[256];
     GetModuleFileNameA(NULL, cExeFilePath, 256);
