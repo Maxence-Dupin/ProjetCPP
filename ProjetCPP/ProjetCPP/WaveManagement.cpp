@@ -1,7 +1,3 @@
-#include <iostream>;
-#include <SFML/Graphics.hpp>;
-#include "Sphere.hpp";
-#include "Player.hpp";
 #include "WaveManagement.hpp";
 
 bool LoadNextWave(WaveState& waveState, std::vector<SphereEnnemy>& ennemyList, Player& player)

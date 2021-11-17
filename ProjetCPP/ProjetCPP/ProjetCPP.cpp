@@ -10,6 +10,7 @@
 #include "Wall.h"
 #include "WaveManagement.hpp"
 #include "UI.hpp"
+#include "GameOver.hpp"
 
 int main()
 {
@@ -48,6 +49,11 @@ int main()
 	waveText.setPosition(320, 10);
 	waveText.setString("WAVE 1");
 	waveText.setFont(pixelated);
+	sf::Text gameOverText;
+	gameOverText.setPosition(100, 200);
+	gameOverText.setString("Appuyez  sur  espace  pour  recommencer \n \n                           ou  escape  pour  quitter");
+	gameOverText.setFont(pixelated);
+	gameOverText.setCharacterSize(40);
 
 
 
@@ -80,10 +86,12 @@ int main()
 			window.close();
 		}
 
-		// Logique
-		if (player.hp <= 0) {
-			window.close();
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && player.isAlive == false)
+		{
+			RestartGame(player, gameWaveState, ennemyList);
 		}
+
+		// Logique
 
 		sf::Time waveElapsedTime = waveTimer.getElapsedTime();
 
@@ -177,15 +185,22 @@ int main()
 
 		window.clear();
 
-		window.draw(player.circle);
+		if (player.isAlive)
+		{
+			window.draw(player.circle);
 
-		for (SphereEnnemy& oneEnnemy : ennemyList) {
-			window.draw(oneEnnemy.shape);
+			for (SphereEnnemy& oneEnnemy : ennemyList) {
+				window.draw(oneEnnemy.shape);
+			}
+
+			window.draw(hpText);
+			window.draw(shieldText);
+			window.draw(waveText);
 		}
-
-		window.draw(hpText);
-		window.draw(shieldText);
-		window.draw(waveText);
+		else
+		{
+			window.draw(gameOverText);
+		}
 
 		window.display();
 	}

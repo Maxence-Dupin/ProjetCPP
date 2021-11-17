@@ -153,12 +153,14 @@
   <ItemGroup>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ProjetCPP.cpp" />
+    <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="WaveManagement.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameOver.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="UI.hpp" />
     <ClInclude Include="Sphere.hpp" />
