@@ -105,101 +105,103 @@ int main()
 		}
 
 		// Logique
+		if (player.isAlive)
+		{
+			sf::Time waveElapsedTime = waveTimer.getElapsedTime();
 
-		sf::Time waveElapsedTime = waveTimer.getElapsedTime();
+			sf::Time elapsedTime = clock.restart(); //< Calcul du temps écoulé depuis la dernière boucle
 
-		sf::Time elapsedTime = clock.restart(); //< Calcul du temps écoulé depuis la dernière boucle
-
-		PlayerMouvement(player, elapsedTime.asSeconds());
-		CollisionWithWall(player);
+			PlayerMouvement(player, elapsedTime.asSeconds());
+			CollisionWithWall(player);
 
 
-		//check if sprites are rendered and delete ennemy from vector if needed
-		auto it = ennemyList.begin();
-		while (it != ennemyList.end()) {
-			sf::Vector2f currentPosition = it->shape.getPosition();
-			bool canDelete = LeaveScreenManager(*it, currentPosition);
+			//check if sprites are rendered and delete ennemy from vector if needed
+			auto it = ennemyList.begin();
+			while (it != ennemyList.end()) {
+				sf::Vector2f currentPosition = it->shape.getPosition();
+				bool canDelete = LeaveScreenManager(*it, currentPosition);
 
-			if (canDelete)
-			{
-				it = ennemyList.erase(it);
+				if (canDelete)
+				{
+					it = ennemyList.erase(it);
+				}
+				else
+				{
+					++it;
+				}
 			}
-			else
+
+			/*std::cout << waveElapsedTime.asSeconds() - gameWaveState.waveWaitTime << std::endl;*/
+
+			//start between wave waiting time
+			if (ennemyList.size() == 0 && gameWaveState.waveRunning) {
+				waveElapsedTime = waveTimer.restart();
+				gameWaveState.waveRunning = false;
+				std::cout << "fin de vague" << std::endl;
+
+			}
+			//load next wave and start it
+			else if ((waveElapsedTime.asSeconds() >= gameWaveState.waveWaitTime) && (gameWaveState.waveRunning == false))
 			{
+
+				if ((gameWaveState.waveNumber % 5 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasDrawBonus)
+				{
+					std::map<int, POWER_UP> currentBonus = LoadBonusTime(enumSize);
+					bonusVisu = setUpBonusVisu(currentBonus);
+					hasDrawBonus = true;
+					hasChooseBonus = false;
+
+					gameWaveState.bonusTime == false;
+
+					waveElapsedTime = waveTimer.restart();
+					std::cout << "bonus time!" << std::endl;
+				}
+				else if (hasChooseBonus)
+				{
+					waveElapsedTime = waveTimer.restart();
+					std::cout << "debut de vague" << std::endl;
+
+					hasDrawBonus = false;
+
+					gameWaveState.waveRunning = LoadNextWave(gameWaveState, ennemyList, player);
+				}
+			}
+
+			//process all movements
+			it = ennemyList.begin();
+
+			while (it != ennemyList.end() && gameWaveState.waveRunning) {
+				switch (it->movementType)
+				{
+				case MOVEMENT_TYPE::LINEAR:
+				case MOVEMENT_TYPE::LINEAR_TO_PLAYER:
+					//mouvement linéaire orientation aléatoire ou vers le joueur
+					SphereLinearMovement(*it, elapsedTime.asSeconds());
+					break;
+				case MOVEMENT_TYPE::ZIGZAG:
+					//mouvement zigzag orientation aléatoire
+					SphereZigZagMovement(*it, elapsedTime.asSeconds());
+					break;
+				case MOVEMENT_TYPE::DASH:
+					//mouvement dash orientation aléatoire
+					SphereDashMovement(*it, player, elapsedTime.asSeconds());
+					break;
+				case MOVEMENT_TYPE::BREATHING:
+					//mouvement dash orientation aléatoire
+					SphereBreathingMovement(*it, elapsedTime.asSeconds());
+					break;
+				default:
+					break;
+				}
+
+
 				++it;
 			}
-		}
 
-		/*std::cout << waveElapsedTime.asSeconds() - gameWaveState.waveWaitTime << std::endl;*/
-
-		//start between wave waiting time
-		if (ennemyList.size() == 0 && gameWaveState.waveRunning) {
-			waveElapsedTime = waveTimer.restart();
-			gameWaveState.waveRunning = false;
-			std::cout << "fin de vague" << std::endl;
-
-		}
-		//load next wave and start it
-		else if ((waveElapsedTime.asSeconds() >= gameWaveState.waveWaitTime) && (gameWaveState.waveRunning == false))
-		{
-
-			if ((gameWaveState.waveNumber % 5 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasDrawBonus)
+			for (SphereEnnemy& oneEnnemy : ennemyList)
 			{
-				std::map<int, POWER_UP> currentBonus = LoadBonusTime(enumSize);
-				bonusVisu = setUpBonusVisu(currentBonus);
-				hasDrawBonus = true;
-				hasChooseBonus = false;
-
-				gameWaveState.bonusTime == false;
-
-				waveElapsedTime = waveTimer.restart();
-				std::cout << "bonus time!" << std::endl;
+				Collisions(oneEnnemy, player);
 			}
-			else if (hasChooseBonus)
-			{
-				waveElapsedTime = waveTimer.restart();
-				std::cout << "debut de vague" << std::endl;
-
-				hasDrawBonus = false;
-
-				gameWaveState.waveRunning = LoadNextWave(gameWaveState, ennemyList, player);
-			}
-		}
-
-		//process all movements
-		it = ennemyList.begin();
-
-		while (it != ennemyList.end() && gameWaveState.waveRunning) {
-			switch (it->movementType)
-			{
-			case MOVEMENT_TYPE::LINEAR:
-			case MOVEMENT_TYPE::LINEAR_TO_PLAYER:
-				//mouvement linéaire orientation aléatoire ou vers le joueur
-				SphereLinearMovement(*it, elapsedTime.asSeconds());
-				break;
-			case MOVEMENT_TYPE::ZIGZAG:
-				//mouvement zigzag orientation aléatoire
-				SphereZigZagMovement(*it, elapsedTime.asSeconds());
-				break;
-			case MOVEMENT_TYPE::DASH:
-				//mouvement dash orientation aléatoire
-				SphereDashMovement(*it, player, elapsedTime.asSeconds());
-				break;
-			case MOVEMENT_TYPE::BREATHING:
-				//mouvement dash orientation aléatoire
-				SphereBreathingMovement(*it, elapsedTime.asSeconds());
-				break;
-			default:
-				break;
-			}
-
-
-			++it;
-		}
-
-		for (SphereEnnemy& oneEnnemy : ennemyList)
-		{
-			Collisions(oneEnnemy, player);
 		}
 
 		// Rendu
