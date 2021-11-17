@@ -229,14 +229,12 @@ void Collisions(SphereEnnemy& ennemy, Player& player)
 			{
 				ChangeShield(player, -1);
 				player.isInvincible = true;
-				std::cout << player.shield << std::endl;
 			}
 			else if (player.hp > 0)
 			{
 				player.shield = 0;
 				ChangeLife(player, -1);
 				player.isInvincible == true;
-				std::cout << player.hp << std::endl;
 				if (player.hp == 0)
 				{
 					player.isAlive = false;
