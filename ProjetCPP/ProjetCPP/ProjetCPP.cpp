@@ -207,6 +207,18 @@ int main()
 			{
 				Collisions(oneEnnemy, player);
 			}
+
+			sf::Time time = player.clock.getElapsedTime();
+			std::cout << time.asMilliseconds() - player.lastHit << std:: endl;
+			//changement de couleur du player si en phase d'invincibilité
+			if (time.asMilliseconds() - player.lastHit + 300 < player.invincibleTime)
+			{
+				player.circle.setFillColor(sf::Color(255, 255, 255, 120));
+			}
+			else
+			{
+				player.circle.setFillColor(sf::Color::White);
+			}
 		}
 
 		// Rendu
