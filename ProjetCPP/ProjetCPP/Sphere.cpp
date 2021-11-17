@@ -36,7 +36,7 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 	ennemy.borderColor = borderColor;
 
 	//definition type de mouvement et couleur associee
-	int randomNumber = rand() % 5 + 1;
+	int randomNumber = rand() % 4 + 1;
 
 	switch (randomNumber)
 	{
@@ -48,15 +48,15 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 		ennemy.movementType = MOVEMENT_TYPE::LINEAR_TO_PLAYER;
 		ennemy.borderColor = sf::Color::Green;
 		break;
+	//case 3:
+		//ennemy.movementType = MOVEMENT_TYPE::ZIGZAG;
+		//ennemy.borderColor = sf::Color::Yellow;
+		//break;
 	case 3:
-		ennemy.movementType = MOVEMENT_TYPE::ZIGZAG;
-		ennemy.borderColor = sf::Color::Yellow;
-		break;
-	case 4:
 		ennemy.movementType = MOVEMENT_TYPE::DASH;
 		ennemy.borderColor = sf::Color::Red;
 		break;
-	case 5:
+	case 4:
 		ennemy.movementType = MOVEMENT_TYPE::BREATHING;
 		ennemy.borderColor = sf::Color::White;
 		break;

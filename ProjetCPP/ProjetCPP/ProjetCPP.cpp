@@ -26,7 +26,7 @@ int main()
 	player.pos._x = 400.0f;
 	player.pos._y = 400.0f;
 	player.color = sf::Color::White;
-	SetUpPlayer(player, 25.0f, 300.0f, 3, 10);
+	SetUpPlayer(player, 25.0f, 300.0f);
 
 	sf::Clock clock;
 	sf::Clock waveTimer;
@@ -143,7 +143,7 @@ int main()
 		else if ((waveElapsedTime.asSeconds() >= gameWaveState.waveWaitTime) && (gameWaveState.waveRunning == false))
 		{
 
-			if ((gameWaveState.waveNumber % 2 == 0) && (gameWaveState.bonusTime) && !hasDrawBonus)
+			if ((gameWaveState.waveNumber % 5 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasDrawBonus)
 			{
 				std::map<int, POWER_UP> currentBonus = LoadBonusTime(enumSize);
 				bonusVisu = setUpBonusVisu(currentBonus);
@@ -203,6 +203,10 @@ int main()
 		}
 
 		// Rendu
+		UpdateHP(player, hpText);
+		UpdateShield(player, shieldText);
+		UpdateWave(gameWaveState.waveNumber, waveText);
+
 		window.clear();
 
 		if (player.isAlive)
