@@ -214,11 +214,17 @@ float vecNorme(sf::Vector2f vector) {
 
 void Collisions(SphereEnnemy& ennemy, Player& player)
 {
-	float dx = ennemy.position.posX - player.pos._x + ennemy.radius - player.radius;
-	float dy = ennemy.position.posY - player.pos._y + ennemy.radius - player.radius;
+	sf::Vector2f ennemyPos = ennemy.shape.getPosition();
+	float ennemyPosX = ennemyPos.x;
+	float ennemyPosY = ennemyPos.y;
+	sf::Vector2f playerPos = player.circle.getPosition();
+	float playerPosX = playerPos.x;
+	float playerPosY = playerPos.y;
+	float dx = ennemyPosX - playerPosX + ennemy.shape.getRadius() - player.circle.getRadius();
+	float dy = ennemyPosY - playerPosY + ennemy.shape.getRadius() - player.circle.getRadius();
 	float distance = sqrt(dx * dx + dy * dy);
 
-	if (distance < ennemy.radius + ennemy.outlineThickness + player.radius)
+	if (distance < ennemy.shape.getRadius() + ennemy.shape.getOutlineThickness() + player.circle.getRadius())
 	{
 		player.newHit = (float)clock();
 		if (player.newHit - player.lastHit > player.invincibleTime && player.isInvincible == true)
