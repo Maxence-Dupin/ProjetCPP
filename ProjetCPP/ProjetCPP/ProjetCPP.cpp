@@ -9,12 +9,14 @@
 #include "Wall.h"
 #include "WaveManagement.hpp"
 #include "BonusManager.hpp"
+#include "UI.hpp"
+#include "GameOver.hpp"
 
 int main()
 {
 	srand(time(NULL));
 
-	
+
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Esquivate");
 	window.setVerticalSyncEnabled(true);
@@ -28,6 +30,32 @@ int main()
 
 	sf::Clock clock;
 	sf::Clock waveTimer;
+
+
+	// Initialisation des variables sf::Text pour l'UI
+	sf::Font pixelated;
+	pixelated.loadFromFile(getAssetsPathFromRoot() + "pixelated.ttf");
+	sf::Text hpText;
+	hpText.setPosition(20, 10);
+	auto hpString = std::to_string(player.hp);
+	hpText.setString(hpString + " HP");
+	hpText.setFont(pixelated);
+	sf::Text shieldText;
+	shieldText.setPosition(650, 10);
+	auto shieldString = std::to_string(player.shield);
+	shieldText.setString("SHIELD : " + shieldString);
+	shieldText.setFont(pixelated);
+	sf::Text waveText;
+	waveText.setPosition(320, 10);
+	waveText.setString("WAVE 1");
+	waveText.setFont(pixelated);
+	sf::Text gameOverText;
+	gameOverText.setPosition(100, 200);
+	gameOverText.setString("Appuyez  sur  espace  pour  recommencer \n \n                           ou  escape  pour  quitter");
+	gameOverText.setFont(pixelated);
+	gameOverText.setCharacterSize(40);
+
+
 
 	//wave manager
 	WaveState gameWaveState;
@@ -66,7 +94,18 @@ int main()
 			}
 		}
 
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+		{
+			window.close();
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && player.isAlive == false)
+		{
+			RestartGame(player, gameWaveState, ennemyList);
+		}
+
 		// Logique
+
 		sf::Time waveElapsedTime = waveTimer.getElapsedTime();
 
 		sf::Time elapsedTime = clock.restart(); //< Calcul du temps écoulé depuis la dernière boucle
@@ -110,7 +149,7 @@ int main()
 				bonusVisu = setUpBonusVisu(currentBonus);
 				hasDrawBonus = true;
 				hasChooseBonus = false;
-					
+
 				gameWaveState.bonusTime == false;
 
 				waveElapsedTime = waveTimer.restart();
@@ -166,16 +205,27 @@ int main()
 		// Rendu
 		window.clear();
 
-		window.draw(player.circle);
+		if (player.isAlive)
+		{
+			window.draw(player.circle);
 
-		for (SphereEnnemy& oneEnnemy : ennemyList) {
-			window.draw(oneEnnemy.shape);
-		}
+			for (SphereEnnemy& oneEnnemy : ennemyList) {
+				window.draw(oneEnnemy.shape);
+			}
 
 		for (int i = 0; i < bonusVisu.size(); i++)
 		{
 			window.draw(bonusVisu[i]);
-		}		
+		}
+
+			window.draw(hpText);
+			window.draw(shieldText);
+			window.draw(waveText);
+		}
+		else
+		{
+			window.draw(gameOverText);
+		}
 
 		window.display();
 	}

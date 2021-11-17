@@ -25,6 +25,7 @@ struct Player
 	float lastHit = 0.0f;
 	float newHit;
 	float invincibleTime = 500.0f;
+	bool isAlive = true;
 };
 
 void PlayerMouvement(Player& player, float deltaTime);

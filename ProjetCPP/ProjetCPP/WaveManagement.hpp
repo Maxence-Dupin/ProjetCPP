@@ -1,4 +1,9 @@
 #pragma once
+#include <iostream>;
+#include <SFML/Graphics.hpp>;
+#include "Sphere.hpp";
+#include "Player.hpp";
+
 struct WaveState
 {
 	int ennemyNumber = 3;
