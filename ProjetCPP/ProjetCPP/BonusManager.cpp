@@ -20,14 +20,14 @@ std::map<int, POWER_UP> LoadBonusTime(int enumSize)//choose 3 powerup
 			it = availablePowerUps.find(randomNumber);
 		}
 
-		availablePowerUps[randomNumber] = (POWER_UP)randomNumber;
+		availablePowerUps[i] = (POWER_UP)randomNumber;
 	}
 
 	auto itg = availablePowerUps.begin();
 
 	while (itg != availablePowerUps.end())
 	{
-		std::cout << "choix num : " << itg->first << " : " << "bonnus num" << itg->second << std::endl;
+		std::cout << "choix num : " << itg->first << " : " << "bonnus num : " << itg->second << std::endl;
 		itg++;
 	}
 
@@ -84,14 +84,15 @@ std::map<int, sf::RectangleShape> setUpBonusVisu(std::map<int, POWER_UP> current
 void SizeDown(Player& player)
 {
 	std::cout << player.radius;
-	player.radius -= 5;
+	player.radius -= (player.radius * 15) / 100;
+	player.circle.setRadius(player.radius);
 	std::cout << player.radius;
 }
 
 void SpeedBonus(Player& player)
 {
 	std::cout << player.speed;
-	player.speed += 20;
+	player.speed += 50;
 	std::cout << player.speed;
 }
 
