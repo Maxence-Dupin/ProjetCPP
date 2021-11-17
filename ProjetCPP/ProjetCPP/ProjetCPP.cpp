@@ -144,7 +144,7 @@ int main()
 			else if ((waveElapsedTime.asSeconds() >= gameWaveState.waveWaitTime) && (gameWaveState.waveRunning == false))
 			{
 
-				if ((gameWaveState.waveNumber % 5 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasDrawBonus)
+				if ((gameWaveState.waveNumber % 1 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasDrawBonus)
 				{
 					std::map<int, POWER_UP> currentBonus = LoadBonusTime(enumSize);
 					bonusVisu = setUpBonusVisu(currentBonus);
