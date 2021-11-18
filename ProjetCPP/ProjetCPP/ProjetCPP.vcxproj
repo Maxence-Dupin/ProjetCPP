@@ -154,11 +154,13 @@
     <ClCompile Include="BonusManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ProjetCPP.cpp" />
+    <ClCompile Include="BonusDrawer.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="WaveManagement.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BonusDrawer.hpp" />
     <ClInclude Include="BonusManager.hpp" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Sphere.hpp" />

@@ -9,14 +9,16 @@
 #include "Wall.h"
 #include "WaveManagement.hpp"
 #include "BonusManager.hpp"
+#include "BonusDrawer.hpp"
 
 int main()
 {
 	srand(time(NULL));
 
-	
+	sf::ContextSettings settings;
+	settings.antialiasingLevel = 8;
 
-	sf::RenderWindow window(sf::VideoMode(800, 600), "Esquivate");
+	sf::RenderWindow window(sf::VideoMode(800, 600), "Esquivate", sf::Style::Default, settings);
 	window.setVerticalSyncEnabled(true);
 
 
@@ -176,6 +178,16 @@ int main()
 		{
 			window.draw(bonusVisu[i]);
 		}		
+
+		//affichage structure visuelle d'un bonus
+		BonusVisual visualToDraw = ShieldUpDraw(200.f, 300.f);
+
+		window.draw(visualToDraw.bonusFrame);
+		window.draw(visualToDraw.bonusCircle);
+
+		for (sf::ConvexShape oneComponent : visualToDraw.bonusShape) {
+			window.draw(oneComponent);
+		}
 
 		window.display();
 	}

@@ -7,6 +7,8 @@ enum POWER_UP
 	SHIELD_UP = 3,//blue
 };
 
+
+
 const int enumSize = 4;
 
 std::map<int, POWER_UP> LoadBonusTime(int enumSize);

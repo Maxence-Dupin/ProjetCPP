@@ -153,3 +153,4 @@ bool buttonPressed (sf::Vector2f clickPos, std::map<int, sf::RectangleShape> bon
 		return true;
 	}
 }
+
