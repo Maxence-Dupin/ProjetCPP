@@ -20,14 +20,17 @@ struct Player
 	float speed;
 	float radius;
 	int hp;
+	int maxHp = 3;
 	int shield;
+	int maxShield = 3;
 	bool isInvincible = true;
 	float lastHit = 0.0f;
 	float newHit;
 	float invincibleTime = 500.0f;
+	bool isAlive = true;
 };
 
 void PlayerMouvement(Player& player, float deltaTime);
 void ChangeLife(Player& player, int amout);
 void ChangeShield(Player& player, int amout);
-void SetUpPlayer(Player& player, float radius, float speed, int hp, int shield);
+void SetUpPlayer(Player& player, float radius, float speed);

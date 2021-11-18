@@ -3,7 +3,7 @@
 #include "Sphere.hpp"
 
 SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillColor, sf::Color borderColor) {
-	
+
 
 	EnnemyPosition position;
 	SphereEnnemy ennemy;
@@ -36,7 +36,7 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 	ennemy.borderColor = borderColor;
 
 	//definition type de mouvement et couleur associee
-	int randomNumber = rand() % 5 + 1;
+	int randomNumber = rand() % 4 + 1;
 
 	switch (randomNumber)
 	{
@@ -48,15 +48,15 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 		ennemy.movementType = MOVEMENT_TYPE::LINEAR_TO_PLAYER;
 		ennemy.borderColor = sf::Color::Green;
 		break;
+	//case 3:
+		//ennemy.movementType = MOVEMENT_TYPE::ZIGZAG;
+		//ennemy.borderColor = sf::Color::Yellow;
+		//break;
 	case 3:
-		ennemy.movementType = MOVEMENT_TYPE::ZIGZAG;
-		ennemy.borderColor = sf::Color::Yellow;
-		break;
-	case 4:
 		ennemy.movementType = MOVEMENT_TYPE::DASH;
 		ennemy.borderColor = sf::Color::Red;
 		break;
-	case 5:
+	case 4:
 		ennemy.movementType = MOVEMENT_TYPE::BREATHING;
 		ennemy.borderColor = sf::Color::White;
 		break;
@@ -143,7 +143,7 @@ void SphereDashMovement(SphereEnnemy& ennemy, Player& player, float deltaTime) {
 	}
 
 	//changement vitesse pour le dash
-	if (ennemy.compteur >= 0 && ennemy.compteur <= 10) 
+	if (ennemy.compteur >= 0 && ennemy.compteur <= 10)
 	{
 		speed = 400.f;
 	}
@@ -164,7 +164,7 @@ void SphereDashMovement(SphereEnnemy& ennemy, Player& player, float deltaTime) {
 		ennemy.direction = sf::Vector2f((targetPoint.x - ennemy.position.posX) / norme, (targetPoint.y - ennemy.position.posY) / norme);
 	}
 	//garde sa trajectoire
-	else 
+	else
 	{
 		++ennemy.compteur;
 		ennemy.shape.move(sf::Vector2f(ennemy.direction.x * speed * deltaTime, ennemy.direction.y * speed * deltaTime));
@@ -225,18 +225,20 @@ void Collisions(SphereEnnemy& ennemy, Player& player)
 		{
 			player.isInvincible == false;
 			player.lastHit = player.newHit;
-			if (player.shield <= 0)
+			if (player.shield > 0)
+			{
+				ChangeShield(player, -1);
+				player.isInvincible = true;
+			}
+			else if (player.hp > 0)
 			{
 				player.shield = 0;
 				ChangeLife(player, -1);
 				player.isInvincible == true;
-				std::cout << player.hp << std::endl;
-			}
-			else
-			{
-				ChangeShield(player, -1);
-				player.isInvincible = true;
-				std::cout << player.shield << std::endl;
+				if (player.hp == 0)
+				{
+					player.isAlive = false;
+				}
 			}
 		}
 
