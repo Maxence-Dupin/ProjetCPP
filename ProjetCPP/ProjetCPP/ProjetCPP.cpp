@@ -51,10 +51,15 @@ int main()
 	waveText.setString("WAVE 1");
 	waveText.setFont(pixelated);
 	sf::Text gameOverText;
-	gameOverText.setPosition(100, 200);
-	gameOverText.setString("Appuyez  sur  espace  pour  recommencer \n \n                           ou  escape  pour  quitter");
+	gameOverText.setPosition(50, 400);
+	gameOverText.setString("APPUYEZ  SUR  ESPACE  POUR  RECOMMENCER \n \n                           OU  ESCAPE  POUR  QUITTER");
 	gameOverText.setFont(pixelated);
 	gameOverText.setCharacterSize(40);
+	sf::Text BonusText;
+	BonusText.setPosition(180, 500);
+	BonusText.setString("CLIQUEZ SUR UN BONUS");
+	BonusText.setFont(pixelated);
+	BonusText.setCharacterSize(50);
 
 
 
@@ -106,9 +111,9 @@ int main()
 		}
 
 		// Logique
+		sf::Time waveElapsedTime = waveTimer.getElapsedTime();
 		if (player.isAlive)
 		{
-			sf::Time waveElapsedTime = waveTimer.getElapsedTime();
 
 			sf::Time elapsedTime = clock.restart(); //< Calcul du temps écoulé depuis la dernière boucle
 
@@ -203,6 +208,18 @@ int main()
 			{
 				Collisions(oneEnnemy, player);
 			}
+
+			sf::Time time = player.clock.getElapsedTime();
+			std::cout << time.asMilliseconds() - player.lastHit << std:: endl;
+			//changement de couleur du player si en phase d'invincibilité
+			if (time.asMilliseconds() - player.lastHit + 300 < player.invincibleTime)
+			{
+				player.circle.setFillColor(sf::Color(255, 255, 255, 120));
+			}
+			else
+			{
+				player.circle.setFillColor(sf::Color::White);
+			}
 		}
 
 		// Rendu
@@ -220,10 +237,10 @@ int main()
 				window.draw(oneEnnemy.shape);
 			}
 
-		for (int i = 0; i < bonusVisu.size(); i++)
-		{
+			for (int i = 0; i < bonusVisu.size(); i++)
+			{
 			window.draw(bonusVisu[i]);
-		}
+			}
 
 		//affichage structure visuelle d'un bonus
 		BonusVisual visualToDraw = ShieldUpDraw(200.f, 300.f);
@@ -238,6 +255,11 @@ int main()
 			window.draw(hpText);
 			window.draw(shieldText);
 			window.draw(waveText);
+			
+			if ((gameWaveState.waveNumber % 5 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasChooseBonus)
+			{
+				window.draw(BonusText);
+			}
 		}
 		else
 		{

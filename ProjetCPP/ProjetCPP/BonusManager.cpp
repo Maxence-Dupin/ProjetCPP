@@ -130,7 +130,7 @@ void LifeUp (Player& player)
 }
 void ShieldUp(Player& player)
 {
-	player.shield += 5;
+	player.maxShield += 5;
 }
 
 void applyBonus(std::map<int, sf::RectangleShape> bonusVisu, int number, Player& player)
