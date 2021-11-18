@@ -9,6 +9,7 @@
 #include "Wall.h"
 #include "WaveManagement.hpp"
 #include "BonusManager.hpp"
+#include "BonusDrawer.hpp"
 #include "UI.hpp"
 #include "GameOver.hpp"
 
