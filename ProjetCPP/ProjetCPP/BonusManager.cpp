@@ -182,5 +182,6 @@ bool buttonPressed (sf::Vector2f clickPos, std::map<int, sf::RectangleShape> bon
 		std::cout << "Bonus 3";
 		return true;
 	}
+	return false;
 }
 

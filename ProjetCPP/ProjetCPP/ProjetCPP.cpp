@@ -52,19 +52,36 @@ int main()
 	waveText.setString("WAVE 1");
 	waveText.setFont(pixelated);
 	sf::Text gameOverText;
-	gameOverText.setPosition(50, 400);
-	gameOverText.setString("APPUYEZ  SUR  ESPACE  POUR  RECOMMENCER \n \n                           OU  ESCAPE  POUR  QUITTER");
+	gameOverText.setPosition(200, 400);
+	gameOverText.setString("PRESS  SPACE  TO  RESTART \n \n        OR  ESCAPE  TO  QUIT");
 	gameOverText.setFont(pixelated);
 	gameOverText.setCharacterSize(40);
 	sf::Text BonusText;
 	BonusText.setPosition(180, 500);
-	BonusText.setString("CLIQUEZ SUR UN BONUS");
+	BonusText.setString("CHOOSE  A  BONUS");
 	BonusText.setFont(pixelated);
 	BonusText.setCharacterSize(50);
 	sf::Text scoreText;
 	scoreText.setPosition(220, 150);
 	scoreText.setFont(pixelated);
 	scoreText.setCharacterSize(120);
+	scoreText.setOutlineThickness(5.0f);
+	scoreText.setOutlineColor(sf::Color::Red);
+	bool gameStarted = false;
+	sf::Text Title;
+	Title.setPosition(50, 100);
+	Title.setString("ESQUIVATE");
+	Title.setOutlineThickness(5.0f);
+	Title.setOutlineColor(sf::Color::Blue);
+	Title.setFont(pixelated);
+	Title.setCharacterSize(150);
+	sf::Text startText;
+	startText.setPosition(120, 350);
+	startText.setString("PRESS  SPACE  TO  START");
+	startText.setFont(pixelated);
+	startText.setCharacterSize(60);
+
+
 
 
 
@@ -73,7 +90,10 @@ int main()
 
 	std::vector<SphereEnnemy> ennemyList;
 
-	LoadNextWave(gameWaveState, ennemyList, player);
+	if (player.isAlive)
+	{
+		LoadNextWave(gameWaveState, ennemyList, player);
+	}
 
 	std::map<int, sf::RectangleShape> bonusVisu;
 	bool hasChooseBonus = true;
@@ -97,8 +117,8 @@ int main()
 					{
 						sf::Vector2f clickPos = sf::Vector2f(event.mouseButton.x, event.mouseButton.y);
 						hasChooseBonus = buttonPressed(clickPos, bonusVisu, player);
+						bonusVisu.clear();
 					}
-					bonusVisu.clear();
 				}
 			default:
 				break;
@@ -108,6 +128,12 @@ int main()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
 			window.close();
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && gameStarted == false)
+		{
+			gameStarted = true;
+			player.isAlive = true;
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && player.isAlive == false)
@@ -155,7 +181,7 @@ int main()
 			else if ((waveElapsedTime.asSeconds() >= gameWaveState.waveWaitTime) && (gameWaveState.waveRunning == false))
 			{
 
-				if ((gameWaveState.waveNumber % 1 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasDrawBonus)
+				if ((gameWaveState.waveNumber % 5 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasDrawBonus)
 				{
 					std::map<int, POWER_UP> currentBonus = LoadBonusTime(enumSize);
 					bonusVisu = setUpBonusVisu(currentBonus);
@@ -234,7 +260,12 @@ int main()
 
 		window.clear();
 
-		if (player.isAlive)
+		if (gameStarted == false)
+		{
+			window.draw(startText);
+			window.draw(Title);
+		}
+		else if (player.isAlive)
 		{
 			window.draw(player.circle);
 
@@ -247,24 +278,24 @@ int main()
 			window.draw(bonusVisu[i]);
 			}
 
-		//affichage structure visuelle d'un bonus
-		BonusVisual visualToDraw = ShieldUpDraw(200.f, 300.f);
+			//affichage structure visuelle d'un bonus
+			/*BonusVisual visualToDraw = ShieldUpDraw(200.f, 300.f);
 
-		window.draw(visualToDraw.bonusFrame);
-		window.draw(visualToDraw.bonusCircle);
+			window.draw(visualToDraw.bonusFrame);
+			window.draw(visualToDraw.bonusCircle);
 
-		for (sf::ConvexShape oneComponent : visualToDraw.bonusShape) {
-			window.draw(oneComponent);
-		}
+			for (sf::ConvexShape oneComponent : visualToDraw.bonusShape) {
+				window.draw(oneComponent);
+			}*/
 
 			window.draw(hpText);
 			window.draw(shieldText);
 			window.draw(waveText);
 			
-			if ((gameWaveState.waveNumber % 5 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasChooseBonus)
+			/*if ((gameWaveState.waveNumber % 5 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasChooseBonus)
 			{
 				window.draw(BonusText);
-			}
+			}*/
 		}
 		else
 		{
