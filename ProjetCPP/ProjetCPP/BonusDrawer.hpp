@@ -12,3 +12,5 @@ BonusVisual HealBonusDraw(float posX, float posY);
 BonusVisual SizeDownDraw(float posX, float posY);
 BonusVisual SpeedUpDraw(float posX, float posY);
 BonusVisual ShieldUpDraw(float posX, float posY);
+
+void DrawBonus(sf::RenderWindow& window, float posX, float posY, int bonusNumber);

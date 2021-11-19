@@ -37,6 +37,7 @@ int main()
 	// Initialisation des variables sf::Text pour l'UI
 	sf::Font pixelated;
 	pixelated.loadFromFile(getAssetsPathFromRoot() + "pixelated.ttf");
+
 	sf::Text hpText;
 	hpText.setPosition(20, 10);
 	auto hpString = std::to_string(player.hp);
@@ -57,8 +58,8 @@ int main()
 	gameOverText.setFont(pixelated);
 	gameOverText.setCharacterSize(40);
 	sf::Text BonusText;
-	BonusText.setPosition(180, 500);
-	BonusText.setString("CHOOSE  A  BONUS");
+	BonusText.setPosition(60, 500);
+	BonusText.setString("SELECTIONNEZ UN BONUS (U, I, O)");
 	BonusText.setFont(pixelated);
 	BonusText.setCharacterSize(50);
 	sf::Text scoreText;
@@ -81,14 +82,36 @@ int main()
 	startText.setFont(pixelated);
 	startText.setCharacterSize(60);
 
+	//bonus cards letter
+	std::vector<sf::Text> letters;
 
+	sf::Text letterU, letterI, letterO;
+	letterU.setString("U");
+	letterI.setString("I");
+	letterO.setString("0");
 
+	letterU.setPosition(sf::Vector2f(220.f, 200.f));
+	letterI.setPosition(sf::Vector2f(370.f, 200.f));
+	letterO.setPosition(sf::Vector2f(520.f, 200.f));
 
+	letters.push_back(letterU);
+	letters.push_back(letterI);
+	letters.push_back(letterO);
+
+	for (sf::Text& oneLetter : letters)
+	{
+		oneLetter.setFont(pixelated);
+		oneLetter.setCharacterSize(40);
+		oneLetter.rotate(10);
+	}
+
+	
 
 	//wave manager
 	WaveState gameWaveState;
 
 	std::vector<SphereEnnemy> ennemyList;
+	std::map<int, POWER_UP> availablePowerUp;
 
 	if (player.isAlive)
 	{
@@ -96,12 +119,16 @@ int main()
 	}
 
 	std::map<int, sf::RectangleShape> bonusVisu;
-	bool hasChooseBonus = true;
-	bool hasDrawBonus = false;
+
+	
 
 	while (window.isOpen())
 	{
-		// Inputs
+		
+		sf::Time waveElapsedTime = waveTimer.getElapsedTime();
+
+		//std::cout << "bonusTime: " << gameWaveState.bonusTime << std::endl;
+		// INPUTS
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -111,38 +138,45 @@ int main()
 				window.close();
 				break;
 			case sf::Event::MouseButtonPressed:
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-				{
-					while (hasChooseBonus == false)
-					{
-						sf::Vector2f clickPos = sf::Vector2f(event.mouseButton.x, event.mouseButton.y);
-						hasChooseBonus = buttonPressed(clickPos, bonusVisu, player);
-						bonusVisu.clear();
-					}
-				}
+				break;
 			default:
 				break;
 			}
 		}
 
+		//close on ESCAPE
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
 			window.close();
 		}
 
+		//start with SPACE
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && gameStarted == false)
 		{
 			gameStarted = true;
 			player.isAlive = true;
 		}
 
+		//restart with SPACE
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && player.isAlive == false)
 		{
 			RestartGame(player, gameWaveState, ennemyList);
 		}
 
-		// Logique
-		sf::Time waveElapsedTime = waveTimer.getElapsedTime();
+		//bonus select with U, I, O
+		if (gameWaveState.bonusTime)
+		{
+			gameWaveState.bonusTime = SelectBonus(availablePowerUp, player);
+
+			if (!gameWaveState.bonusTime)
+			{
+				gameWaveState.waveNumber += 1;
+			}
+		}
+
+		// LOGIQUE
+		
+
 		if (player.isAlive)
 		{
 
@@ -168,37 +202,28 @@ int main()
 				}
 			}
 
-			/*std::cout << waveElapsedTime.asSeconds() - gameWaveState.waveWaitTime << std::endl;*/
-
 			//start between wave waiting time
 			if (ennemyList.size() == 0 && gameWaveState.waveRunning) {
 				waveElapsedTime = waveTimer.restart();
 				gameWaveState.waveRunning = false;
-				std::cout << "fin de vague" << std::endl;
-
 			}
+
 			//load next wave and start it
-			else if ((waveElapsedTime.asSeconds() >= gameWaveState.waveWaitTime) && (gameWaveState.waveRunning == false))
+			else if (waveElapsedTime.asSeconds() >= gameWaveState.waveWaitTime && gameWaveState.waveRunning == false)
 			{
 
-				if ((gameWaveState.waveNumber % 5 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasDrawBonus)
+				if (gameWaveState.waveNumber % 5 == 0 && gameWaveState.waveNumber != 0 && !gameWaveState.bonusTime)
 				{
-					std::map<int, POWER_UP> currentBonus = LoadBonusTime(enumSize);
-					bonusVisu = setUpBonusVisu(currentBonus);
-					hasDrawBonus = true;
-					hasChooseBonus = false;
+					availablePowerUp = LoadBonusTime(enumSize);
 
-					gameWaveState.bonusTime == false;
+					gameWaveState.bonusTime = true;
 
 					waveElapsedTime = waveTimer.restart();
-					std::cout << "bonus time!" << std::endl;
 				}
-				else if (hasChooseBonus)
+
+				else if (!gameWaveState.bonusTime)
 				{
 					waveElapsedTime = waveTimer.restart();
-					std::cout << "debut de vague" << std::endl;
-
-					hasDrawBonus = false;
 
 					gameWaveState.waveRunning = LoadNextWave(gameWaveState, ennemyList, player);
 				}
@@ -210,25 +235,25 @@ int main()
 			while (it != ennemyList.end() && gameWaveState.waveRunning) {
 				switch (it->movementType)
 				{
-				case MOVEMENT_TYPE::LINEAR:
-				case MOVEMENT_TYPE::LINEAR_TO_PLAYER:
-					//mouvement linéaire orientation aléatoire ou vers le joueur
-					SphereLinearMovement(*it, elapsedTime.asSeconds());
-					break;
-				case MOVEMENT_TYPE::ZIGZAG:
-					//mouvement zigzag orientation aléatoire
-					SphereZigZagMovement(*it, elapsedTime.asSeconds());
-					break;
-				case MOVEMENT_TYPE::DASH:
-					//mouvement dash orientation aléatoire
-					SphereDashMovement(*it, player, elapsedTime.asSeconds());
-					break;
-				case MOVEMENT_TYPE::BREATHING:
-					//mouvement dash orientation aléatoire
-					SphereBreathingMovement(*it, elapsedTime.asSeconds());
-					break;
-				default:
-					break;
+					case MOVEMENT_TYPE::LINEAR:
+					case MOVEMENT_TYPE::LINEAR_TO_PLAYER:
+						//mouvement linéaire orientation aléatoire ou vers le joueur
+						SphereLinearMovement(*it, elapsedTime.asSeconds());
+						break;
+					case MOVEMENT_TYPE::ZIGZAG:
+						//mouvement zigzag orientation aléatoire
+						SphereZigZagMovement(*it, elapsedTime.asSeconds());
+						break;
+					case MOVEMENT_TYPE::DASH:
+						//mouvement dash orientation aléatoire
+						SphereDashMovement(*it, player, elapsedTime.asSeconds());
+						break;
+					case MOVEMENT_TYPE::BREATHING:
+						//mouvement dash orientation aléatoire
+						SphereBreathingMovement(*it, elapsedTime.asSeconds());
+						break;
+					default:
+						break;
 				}
 
 
@@ -262,40 +287,67 @@ int main()
 
 		if (gameStarted == false)
 		{
+			//render home screen
 			window.draw(startText);
 			window.draw(Title);
 		}
 		else if (player.isAlive)
 		{
-			window.draw(player.circle);
+			//render player
+			if(!gameWaveState.bonusTime)
+				window.draw(player.circle);
 
+			//render ennemies
 			for (SphereEnnemy& oneEnnemy : ennemyList) {
 				window.draw(oneEnnemy.shape);
 			}
-
-			for (int i = 0; i < bonusVisu.size(); i++)
-			{
-			window.draw(bonusVisu[i]);
-			}
-
-			//affichage structure visuelle d'un bonus
-			/*BonusVisual visualToDraw = ShieldUpDraw(200.f, 300.f);
-
-			window.draw(visualToDraw.bonusFrame);
-			window.draw(visualToDraw.bonusCircle);
-
-			for (sf::ConvexShape oneComponent : visualToDraw.bonusShape) {
-				window.draw(oneComponent);
-			}*/
 
 			window.draw(hpText);
 			window.draw(shieldText);
 			window.draw(waveText);
 			
-			/*if ((gameWaveState.waveNumber % 5 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasChooseBonus)
+			if (gameWaveState.bonusTime)
 			{
+				//affichage des lettres
+				auto itLetterVector = letters.begin();
+				int letterToDraw = 0;
+
+				while (itLetterVector != letters.end())
+				{
+					window.draw(letters[letterToDraw]);
+
+					++letterToDraw;
+					++itLetterVector;
+				}
+				
+				//affichage du texte choix bonus
 				window.draw(BonusText);
-			}*/
+
+				//affichage des 3 bonus possibles
+				auto itPowerUpMap = availablePowerUp.begin();
+				int bonusDrew = 0;
+
+				while (itPowerUpMap != availablePowerUp.end())
+				{
+					switch (bonusDrew)
+					{
+					case 0:
+						DrawBonus(window, 250.f, 300.f, itPowerUpMap->second);
+						break;
+					case 1:
+						DrawBonus(window, 400.f, 300.f, itPowerUpMap->second);
+						break;
+					case 2:
+						DrawBonus(window, 550.f, 300.f, itPowerUpMap->second);
+						break;
+					default:
+						break;
+					}
+
+					++bonusDrew;
+					++itPowerUpMap;
+				}
+			}
 		}
 		else
 		{

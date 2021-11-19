@@ -26,7 +26,7 @@ std::string getAssetsPathFromRoot()
     exeNamePos = appPath.find_last_of("\\/");
     appPath = appPath.substr(0, exeNamePos + 1);
     std::string assetsPath = appPath + "\Assets\\";
-    std::cout << assetsPath << std::endl;
+    //std::cout << assetsPath << std::endl;
     return assetsPath;
 }
 
