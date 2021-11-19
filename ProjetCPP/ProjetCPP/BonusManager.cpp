@@ -24,23 +24,15 @@ std::map<int, POWER_UP> LoadBonusTime(int enumSize)//choose 3 powerup
 		availablePowerUps[randomNumber] = (POWER_UP)randomNumber;
 	}
 
-	auto itg = availablePowerUps.begin();
-
-	while (itg != availablePowerUps.end())
-	{
-		std::cout << "choix num : " << itg->first << " : " << "bonnus num : " << itg->second << std::endl;
-		itg++;
-	}
-
 	return availablePowerUps;
 }
 
 
 void SizeDown(Player& player)
 {
-	if (player.radius <= 18.f)
+	if (player.radius >= 18.f)
 	{
-		player.radius -= (player.radius * 15) / 100;
+		player.radius -= 3.f;
 		player.circle.setRadius(player.radius);
 	}
 }

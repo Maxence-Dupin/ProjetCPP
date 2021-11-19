@@ -58,12 +58,35 @@ int main()
 	gameOverText.setFont(pixelated);
 	gameOverText.setCharacterSize(40);
 	sf::Text BonusText;
-	BonusText.setPosition(180, 500);
-	BonusText.setString("CLIQUEZ SUR UN BONUS");
+	BonusText.setPosition(60, 500);
+	BonusText.setString("SELECTIONNEZ UN BONUS (U, I, O)");
 	BonusText.setFont(pixelated);
 	BonusText.setCharacterSize(50);
 
+	//bonus cards letter
+	std::vector<sf::Text> letters;
 
+	sf::Text letterU, letterI, letterO;
+	letterU.setString("U");
+	letterI.setString("I");
+	letterO.setString("0");
+
+	letterU.setPosition(sf::Vector2f(220.f, 200.f));
+	letterI.setPosition(sf::Vector2f(370.f, 200.f));
+	letterO.setPosition(sf::Vector2f(520.f, 200.f));
+
+	letters.push_back(letterU);
+	letters.push_back(letterI);
+	letters.push_back(letterO);
+
+	for (sf::Text& oneLetter : letters)
+	{
+		oneLetter.setFont(pixelated);
+		oneLetter.setCharacterSize(40);
+		oneLetter.rotate(10);
+	}
+
+	
 
 	//wave manager
 	WaveState gameWaveState;
@@ -79,6 +102,7 @@ int main()
 
 	while (window.isOpen())
 	{
+		
 		sf::Time waveElapsedTime = waveTimer.getElapsedTime();
 
 		//std::cout << "bonusTime: " << gameWaveState.bonusTime << std::endl;
@@ -153,28 +177,24 @@ int main()
 			if (ennemyList.size() == 0 && gameWaveState.waveRunning) {
 				waveElapsedTime = waveTimer.restart();
 				gameWaveState.waveRunning = false;
-				std::cout << "fin de vague" << std::endl;
-
 			}
 
 			//load next wave and start it
 			else if (waveElapsedTime.asSeconds() >= gameWaveState.waveWaitTime && gameWaveState.waveRunning == false)
 			{
 
-				if (gameWaveState.waveNumber % 5 == 0 && gameWaveState.waveNumber != 0 && !gameWaveState.bonusTime)
+				if (gameWaveState.waveNumber % 2 == 0 && gameWaveState.waveNumber != 0 && !gameWaveState.bonusTime)
 				{
 					availablePowerUp = LoadBonusTime(enumSize);
 
 					gameWaveState.bonusTime = true;
 
 					waveElapsedTime = waveTimer.restart();
-					std::cout << "bonus time!" << std::endl;
 				}
 
 				else if (!gameWaveState.bonusTime)
 				{
 					waveElapsedTime = waveTimer.restart();
-					std::cout << "debut de vague" << std::endl;
 
 					gameWaveState.waveRunning = LoadNextWave(gameWaveState, ennemyList, player);
 				}
@@ -186,25 +206,25 @@ int main()
 			while (it != ennemyList.end() && gameWaveState.waveRunning) {
 				switch (it->movementType)
 				{
-				case MOVEMENT_TYPE::LINEAR:
-				case MOVEMENT_TYPE::LINEAR_TO_PLAYER:
-					//mouvement linéaire orientation aléatoire ou vers le joueur
-					SphereLinearMovement(*it, elapsedTime.asSeconds());
-					break;
-				case MOVEMENT_TYPE::ZIGZAG:
-					//mouvement zigzag orientation aléatoire
-					SphereZigZagMovement(*it, elapsedTime.asSeconds());
-					break;
-				case MOVEMENT_TYPE::DASH:
-					//mouvement dash orientation aléatoire
-					SphereDashMovement(*it, player, elapsedTime.asSeconds());
-					break;
-				case MOVEMENT_TYPE::BREATHING:
-					//mouvement dash orientation aléatoire
-					SphereBreathingMovement(*it, elapsedTime.asSeconds());
-					break;
-				default:
-					break;
+					case MOVEMENT_TYPE::LINEAR:
+					case MOVEMENT_TYPE::LINEAR_TO_PLAYER:
+						//mouvement linéaire orientation aléatoire ou vers le joueur
+						SphereLinearMovement(*it, elapsedTime.asSeconds());
+						break;
+					case MOVEMENT_TYPE::ZIGZAG:
+						//mouvement zigzag orientation aléatoire
+						SphereZigZagMovement(*it, elapsedTime.asSeconds());
+						break;
+					case MOVEMENT_TYPE::DASH:
+						//mouvement dash orientation aléatoire
+						SphereDashMovement(*it, player, elapsedTime.asSeconds());
+						break;
+					case MOVEMENT_TYPE::BREATHING:
+						//mouvement dash orientation aléatoire
+						SphereBreathingMovement(*it, elapsedTime.asSeconds());
+						break;
+					default:
+						break;
 				}
 
 
@@ -254,6 +274,18 @@ int main()
 			
 			if (gameWaveState.bonusTime)
 			{
+				//affichage des lettres
+				auto itLetterVector = letters.begin();
+				int letterToDraw = 0;
+
+				while (itLetterVector != letters.end())
+				{
+					window.draw(letters[letterToDraw]);
+
+					++letterToDraw;
+					++itLetterVector;
+				}
+				
 				//affichage du texte choix bonus
 				window.draw(BonusText);
 
@@ -266,13 +298,13 @@ int main()
 					switch (bonusDrew)
 					{
 					case 0:
-						DrawBonus(window, 250.f, 300.f, itPowerUpMap->second, "U");
+						DrawBonus(window, 250.f, 300.f, itPowerUpMap->second);
 						break;
 					case 1:
-						DrawBonus(window, 400.f, 300.f, itPowerUpMap->second, "I");
+						DrawBonus(window, 400.f, 300.f, itPowerUpMap->second);
 						break;
 					case 2:
-						DrawBonus(window, 550.f, 300.f, itPowerUpMap->second, "O");
+						DrawBonus(window, 550.f, 300.f, itPowerUpMap->second);
 						break;
 					default:
 						break;

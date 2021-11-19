@@ -10,23 +10,18 @@
 
 BonusVisual CircleAndFrameDraw(BonusVisual bonusVisual, float posX, float posY, sf::Color color) 
 {
-	sf::Font pixelated;
-	pixelated.loadFromFile(getAssetsPathFromRoot() + "pixelated.ttf");
-
 	//definition frame et circle
 	sf::RectangleShape bonusFrame;
 	sf::CircleShape bonusCircle;
-	sf::Text bonusLetter;
 
 	// - - - FRAME 
-	bonusFrame.setSize(sf::Vector2f(120, 180));
+	bonusFrame.setSize(sf::Vector2f(120.f, 180.f));
 	bonusFrame.setOutlineThickness(5.f);
 	bonusFrame.setOutlineColor(color);
 	bonusFrame.setFillColor(sf::Color::Transparent);
 	bonusFrame.setOrigin(bonusFrame.getSize() / 2.f);
 	bonusFrame.setPosition(posX, posY);
 	bonusFrame.rotate(10);
-
 
 	// - - - CIRCLE
 	float radius = 30.f;
@@ -37,21 +32,14 @@ BonusVisual CircleAndFrameDraw(BonusVisual bonusVisual, float posX, float posY, 
 
 	bonusCircle.setPosition(posX - radius, posY - radius);
 
-	// - - - LETTER
-	bonusLetter.setString('X');
-	bonusLetter.setFont(pixelated);
-	bonusLetter.setFillColor(color);
-	bonusLetter.setPosition(posX - 50.f, posY);
-
 	//attribution des shapes dans la structure
 	bonusVisual.bonusFrame = bonusFrame;
 	bonusVisual.bonusCircle = bonusCircle;
-	bonusVisual.bonusLetter = bonusLetter;
 
 	return bonusVisual;
 }
 
-void DrawBonus(sf::RenderWindow& window, float posX, float posY, int bonusNumber, std::string letter)
+void DrawBonus(sf::RenderWindow& window, float posX, float posY, int bonusNumber)
 {
 	BonusVisual visualToDraw;
 
@@ -73,7 +61,6 @@ void DrawBonus(sf::RenderWindow& window, float posX, float posY, int bonusNumber
 		break;
 	}
 	 
-	//window.draw(visualToDraw.bonusLetter);
 	window.draw(visualToDraw.bonusFrame);
 	window.draw(visualToDraw.bonusCircle);
 

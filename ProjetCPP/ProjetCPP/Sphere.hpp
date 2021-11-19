@@ -27,7 +27,7 @@ struct SphereEnnemy
 	sf::Color borderColor;
 	sf::Vector2f direction;
 	float compteur = 0.0f;
-	int changeLeft = 3;
+	int changeLeft = 4;
 	bool hasBeenRendered = false;
 	MOVEMENT_TYPE movementType; 
 };

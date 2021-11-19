@@ -58,7 +58,7 @@ SphereEnnemy SphereCreator(float radius, float outlineThickness, sf::Color fillC
 		break;
 	case 4:
 		ennemy.movementType = MOVEMENT_TYPE::BREATHING;
-		ennemy.borderColor = sf::Color::White;
+		ennemy.borderColor = sf::Color::Yellow;
 		break;
 	default:
 		break;

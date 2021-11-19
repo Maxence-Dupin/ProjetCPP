@@ -3,6 +3,7 @@
 bool LoadNextWave(WaveState& waveState, std::vector<SphereEnnemy>& ennemyList, Player& player)
 {
 	waveState.waveNumber += 1;
+	std::cout << "vague " << waveState.waveNumber << std::endl;
 
 	for (int i = 0; i < waveState.ennemyNumber; ++i) {
 		float radius = static_cast <float> (rand() % (30 - 15 + 1) + 15);
