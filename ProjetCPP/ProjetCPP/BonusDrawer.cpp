@@ -2,14 +2,21 @@
 #include <SFML/Graphics.hpp>
 #include <map>
 #include "Player.hpp"
+#include "UI.hpp"
 #include "BonusManager.hpp"
 #include "BonusDrawer.hpp"
 
+
+
 BonusVisual CircleAndFrameDraw(BonusVisual bonusVisual, float posX, float posY, sf::Color color) 
 {
+	sf::Font pixelated;
+	pixelated.loadFromFile(getAssetsPathFromRoot() + "pixelated.ttf");
+
 	//definition frame et circle
 	sf::RectangleShape bonusFrame;
 	sf::CircleShape bonusCircle;
+	sf::Text bonusLetter;
 
 	// - - - FRAME 
 	bonusFrame.setSize(sf::Vector2f(120, 180));
@@ -30,14 +37,21 @@ BonusVisual CircleAndFrameDraw(BonusVisual bonusVisual, float posX, float posY, 
 
 	bonusCircle.setPosition(posX - radius, posY - radius);
 
+	// - - - LETTER
+	bonusLetter.setString('X');
+	bonusLetter.setFont(pixelated);
+	bonusLetter.setFillColor(color);
+	bonusLetter.setPosition(posX - 50.f, posY);
+
 	//attribution des shapes dans la structure
 	bonusVisual.bonusFrame = bonusFrame;
 	bonusVisual.bonusCircle = bonusCircle;
+	bonusVisual.bonusLetter = bonusLetter;
 
 	return bonusVisual;
 }
 
-void DrawBonus(sf::RenderWindow& window, float posX, float posY, int bonusNumber)
+void DrawBonus(sf::RenderWindow& window, float posX, float posY, int bonusNumber, std::string letter)
 {
 	BonusVisual visualToDraw;
 
@@ -59,9 +73,10 @@ void DrawBonus(sf::RenderWindow& window, float posX, float posY, int bonusNumber
 		break;
 	}
 	 
-
+	//window.draw(visualToDraw.bonusLetter);
 	window.draw(visualToDraw.bonusFrame);
 	window.draw(visualToDraw.bonusCircle);
+
 
 	for (sf::ConvexShape oneComponent : visualToDraw.bonusShape) {
 		window.draw(oneComponent);

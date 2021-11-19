@@ -37,6 +37,7 @@ int main()
 	// Initialisation des variables sf::Text pour l'UI
 	sf::Font pixelated;
 	pixelated.loadFromFile(getAssetsPathFromRoot() + "pixelated.ttf");
+
 	sf::Text hpText;
 	hpText.setPosition(20, 10);
 	auto hpString = std::to_string(player.hp);
@@ -68,6 +69,7 @@ int main()
 	WaveState gameWaveState;
 
 	std::vector<SphereEnnemy> ennemyList;
+	std::map<int, POWER_UP> availablePowerUp;
 
 	LoadNextWave(gameWaveState, ennemyList, player);
 
@@ -91,10 +93,9 @@ int main()
 				{
 					while (hasChooseBonus == false)
 					{
-						sf::Vector2f clickPos = sf::Vector2f(event.mouseButton.x, event.mouseButton.y);
-						hasChooseBonus = buttonPressed(clickPos, bonusVisu, player);
+
 					}
-					bonusVisu.clear();
+
 				}
 			default:
 				break;
@@ -151,19 +152,19 @@ int main()
 			else if ((waveElapsedTime.asSeconds() >= gameWaveState.waveWaitTime) && (gameWaveState.waveRunning == false))
 			{
 
-				if ((gameWaveState.waveNumber % 1 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasDrawBonus)
+				if ((gameWaveState.waveNumber % 2 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasDrawBonus)
 				{
-					std::map<int, POWER_UP> currentBonus = LoadBonusTime(enumSize);
-					bonusVisu = setUpBonusVisu(currentBonus);
+					availablePowerUp = LoadBonusTime(enumSize);
+
 					hasDrawBonus = true;
 					hasChooseBonus = false;
 
-					gameWaveState.bonusTime == false;
+					gameWaveState.bonusTime = true;
 
 					waveElapsedTime = waveTimer.restart();
 					std::cout << "bonus time!" << std::endl;
 				}
-				else if (hasChooseBonus)
+				else if (!gameWaveState.bonusTime)
 				{
 					waveElapsedTime = waveTimer.restart();
 					std::cout << "debut de vague" << std::endl;
@@ -211,7 +212,7 @@ int main()
 			}
 
 			sf::Time time = player.clock.getElapsedTime();
-			std::cout << time.asMilliseconds() - player.lastHit << std:: endl;
+			//std::cout << time.asMilliseconds() - player.lastHit << std:: endl;
 			//changement de couleur du player si en phase d'invincibilité
 			if (time.asMilliseconds() - player.lastHit + 300 < player.invincibleTime)
 			{
@@ -232,25 +233,49 @@ int main()
 
 		if (player.isAlive)
 		{
-			window.draw(player.circle);
+			if (gameWaveState.bonusTime)
+			{
+				window.draw(player.circle);
+			}
+			
 
 			for (SphereEnnemy& oneEnnemy : ennemyList) {
 				window.draw(oneEnnemy.shape);
 			}
 
-			for (int i = 0; i < bonusVisu.size(); i++)
-			{
-			window.draw(bonusVisu[i]);
-			}
-		
-
 			window.draw(hpText);
 			window.draw(shieldText);
 			window.draw(waveText);
 			
-			if ((gameWaveState.waveNumber % 5 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasChooseBonus)
+			if ((gameWaveState.waveNumber % 2 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasChooseBonus)
 			{
+				//affichage du texte choix bonus
 				window.draw(BonusText);
+
+				//affichage des 3 bonus possibles
+				auto itPowerUpMap = availablePowerUp.begin();
+				int bonusDrew = 0;
+
+				while (itPowerUpMap != availablePowerUp.end())
+				{
+					switch (bonusDrew)
+					{
+					case 0:
+						DrawBonus(window, 250.f, 300.f, itPowerUpMap->second, "U");
+						break;
+					case 1:
+						DrawBonus(window, 400.f, 300.f, itPowerUpMap->second, "I");
+						break;
+					case 2:
+						DrawBonus(window, 550.f, 300.f, itPowerUpMap->second, "O");
+						break;
+					default:
+						break;
+					}
+
+					++bonusDrew;
+					++itPowerUpMap;
+				}
 			}
 		}
 		else
