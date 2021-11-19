@@ -150,6 +150,13 @@ int main()
 			window.close();
 		}
 
+		//start with SPACE
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && gameStarted == false)
+		{
+			gameStarted = true;
+			player.isAlive = true;
+		}
+
 		//restart with SPACE
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && player.isAlive == false)
 		{
@@ -205,7 +212,7 @@ int main()
 			else if (waveElapsedTime.asSeconds() >= gameWaveState.waveWaitTime && gameWaveState.waveRunning == false)
 			{
 
-				if (gameWaveState.waveNumber % 2 == 0 && gameWaveState.waveNumber != 0 && !gameWaveState.bonusTime)
+				if (gameWaveState.waveNumber % 5 == 0 && gameWaveState.waveNumber != 0 && !gameWaveState.bonusTime)
 				{
 					availablePowerUp = LoadBonusTime(enumSize);
 
@@ -280,19 +287,17 @@ int main()
 
 		if (gameStarted == false)
 		{
-			if (!gameWaveState.bonusTime)
-			{
-				window.draw(player.circle);
-			}
-			
-			//render ennemies
+			//render home screen
 			window.draw(startText);
 			window.draw(Title);
 		}
 		else if (player.isAlive)
 		{
-			window.draw(player.circle);
+			//render player
+			if(!gameWaveState.bonusTime)
+				window.draw(player.circle);
 
+			//render ennemies
 			for (SphereEnnemy& oneEnnemy : ennemyList) {
 				window.draw(oneEnnemy.shape);
 			}

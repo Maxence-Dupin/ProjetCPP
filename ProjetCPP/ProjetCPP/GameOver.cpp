@@ -13,7 +13,7 @@ void RestartGame(Player& player, WaveState& waveState, std::vector<SphereEnnemy>
 	player.maxShield = 3;
 	player.shield = player.maxShield;
 	player.speed = 300.0f;
-	player.radius = 25.0f;
+	player.radius = 35.0f;
 	player.circle.setRadius(player.radius);
 	player.isAlive = true;
 	player.invincibleTime = 500.0f;
