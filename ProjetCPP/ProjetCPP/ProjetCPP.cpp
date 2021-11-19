@@ -36,7 +36,7 @@ int main()
 
 	// Initialisation des variables sf::Text pour l'UI
 	sf::Font pixelated;
-	pixelated.loadFromFile(getAssetsPathFromRoot() + "pixelated.ttf");
+	pixelated.loadFromFile(getAssetsPath() + "pixelated.ttf");
 	sf::Text hpText;
 	hpText.setPosition(20, 10);
 	auto hpString = std::to_string(player.hp);
@@ -181,7 +181,7 @@ int main()
 			else if ((waveElapsedTime.asSeconds() >= gameWaveState.waveWaitTime) && (gameWaveState.waveRunning == false))
 			{
 
-				if ((gameWaveState.waveNumber % 5 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasDrawBonus)
+				/*if ((gameWaveState.waveNumber % 5 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasDrawBonus)
 				{
 					std::map<int, POWER_UP> currentBonus = LoadBonusTime(enumSize);
 					bonusVisu = setUpBonusVisu(currentBonus);
@@ -193,7 +193,7 @@ int main()
 					waveElapsedTime = waveTimer.restart();
 					std::cout << "bonus time!" << std::endl;
 				}
-				else if (hasChooseBonus)
+				else*/ if (hasChooseBonus)
 				{
 					waveElapsedTime = waveTimer.restart();
 					std::cout << "debut de vague" << std::endl;
