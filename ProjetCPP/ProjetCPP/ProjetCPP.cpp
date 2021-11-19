@@ -28,7 +28,7 @@ int main()
 	player.pos._x = 400.0f;
 	player.pos._y = 400.0f;
 	player.color = sf::Color::White;
-	SetUpPlayer(player, 25.0f, 300.0f);
+	SetUpPlayer(player, 35.0f, 300.0f);
 
 	sf::Clock clock;
 	sf::Clock waveTimer;
@@ -53,8 +53,8 @@ int main()
 	waveText.setString("WAVE 1");
 	waveText.setFont(pixelated);
 	sf::Text gameOverText;
-	gameOverText.setPosition(50, 400);
-	gameOverText.setString("APPUYEZ  SUR  ESPACE  POUR  RECOMMENCER \n \n                           OU  ESCAPE  POUR  QUITTER");
+	gameOverText.setPosition(200, 400);
+	gameOverText.setString("PRESS  SPACE  TO  RESTART \n \n        OR  ESCAPE  TO  QUIT");
 	gameOverText.setFont(pixelated);
 	gameOverText.setCharacterSize(40);
 	sf::Text BonusText;
@@ -62,6 +62,25 @@ int main()
 	BonusText.setString("SELECTIONNEZ UN BONUS (U, I, O)");
 	BonusText.setFont(pixelated);
 	BonusText.setCharacterSize(50);
+	sf::Text scoreText;
+	scoreText.setPosition(220, 150);
+	scoreText.setFont(pixelated);
+	scoreText.setCharacterSize(120);
+	scoreText.setOutlineThickness(5.0f);
+	scoreText.setOutlineColor(sf::Color::Red);
+	bool gameStarted = false;
+	sf::Text Title;
+	Title.setPosition(50, 100);
+	Title.setString("ESQUIVATE");
+	Title.setOutlineThickness(5.0f);
+	Title.setOutlineColor(sf::Color::Blue);
+	Title.setFont(pixelated);
+	Title.setCharacterSize(150);
+	sf::Text startText;
+	startText.setPosition(120, 350);
+	startText.setString("PRESS  SPACE  TO  START");
+	startText.setFont(pixelated);
+	startText.setCharacterSize(60);
 
 	//bonus cards letter
 	std::vector<sf::Text> letters;
@@ -94,7 +113,10 @@ int main()
 	std::vector<SphereEnnemy> ennemyList;
 	std::map<int, POWER_UP> availablePowerUp;
 
-	LoadNextWave(gameWaveState, ennemyList, player);
+	if (player.isAlive)
+	{
+		LoadNextWave(gameWaveState, ennemyList, player);
+	}
 
 	std::map<int, sf::RectangleShape> bonusVisu;
 
@@ -237,7 +259,6 @@ int main()
 			}
 
 			sf::Time time = player.clock.getElapsedTime();
-			//std::cout << time.asMilliseconds() - player.lastHit << std:: endl;
 			//changement de couleur du player si en phase d'invincibilité
 			if (time.asMilliseconds() - player.lastHit + 300 < player.invincibleTime)
 			{
@@ -253,10 +274,11 @@ int main()
 		UpdateHP(player, hpText);
 		UpdateShield(player, shieldText);
 		UpdateWave(gameWaveState.waveNumber, waveText);
+		UpdateWave(gameWaveState.waveNumber, scoreText);
 
 		window.clear();
 
-		if (player.isAlive)
+		if (gameStarted == false)
 		{
 			if (!gameWaveState.bonusTime)
 			{
@@ -264,6 +286,13 @@ int main()
 			}
 			
 			//render ennemies
+			window.draw(startText);
+			window.draw(Title);
+		}
+		else if (player.isAlive)
+		{
+			window.draw(player.circle);
+
 			for (SphereEnnemy& oneEnnemy : ennemyList) {
 				window.draw(oneEnnemy.shape);
 			}
@@ -318,6 +347,7 @@ int main()
 		else
 		{
 			window.draw(gameOverText);
+			window.draw(scoreText);
 		}
 
 		window.display();

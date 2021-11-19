@@ -48,6 +48,7 @@ void LifeUp (Player& player)
 	if (player.hp < 3)
 		player.hp += 1;
 }
+
 void ShieldUp(Player& player)
 {	
 	if (player.shield < 3)
