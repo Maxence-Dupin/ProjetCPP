@@ -57,16 +57,16 @@ void DrawBonus(sf::RenderWindow& window, float posX, float posY, int bonusNumber
 
 	switch (bonusNumber)
 	{
-	case 0:
+	case POWER_UP::LIFE_UP:
 		visualToDraw = HealBonusDraw(posX, posY);
 		break;
-	case 1:
+	case POWER_UP::SIZE_DOWN:
 		visualToDraw = SizeDownDraw(posX, posY);
 		break;
-	case 2:
+	case POWER_UP::SPEED_UP:
 		visualToDraw = SpeedUpDraw(posX, posY);	
 		break;
-	case 3:
+	case POWER_UP::SHIELD_UP:
 		visualToDraw = ShieldUpDraw(posX, posY);
 		break;
 	default:

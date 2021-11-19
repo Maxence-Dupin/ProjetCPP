@@ -21,7 +21,7 @@ void RestartGame(Player& player, WaveState& waveState, std::vector<SphereEnnemy>
 	waveState.ennemyNumber = 3;
 	waveState.waveNumber = 0;
 	waveState.waveRunning = true;
-	waveState.bonusTime = true;
+	waveState.bonusTime = false;
 	waveState.waveWaitTime = 2.0f;
 
 	auto it = ennemyList.begin();

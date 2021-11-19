@@ -2,6 +2,8 @@
 
 bool LoadNextWave(WaveState& waveState, std::vector<SphereEnnemy>& ennemyList, Player& player)
 {
+	waveState.waveNumber += 1;
+
 	for (int i = 0; i < waveState.ennemyNumber; ++i) {
 		float radius = static_cast <float> (rand() % (30 - 15 + 1) + 15);
 
@@ -14,17 +16,11 @@ bool LoadNextWave(WaveState& waveState, std::vector<SphereEnnemy>& ennemyList, P
 		ennemyList.push_back(ennemy);
 	}
 
-	if (waveState.waveNumber % 5 == 0)
-	{
-		player.shield = player.maxShield;
-	}
-
-	waveState.waveNumber += 1;
 
 	if (waveState.ennemyNumber < 15)
 	{
 		waveState.ennemyNumber += 2;
 	}
-	
+
 	return true;
 }

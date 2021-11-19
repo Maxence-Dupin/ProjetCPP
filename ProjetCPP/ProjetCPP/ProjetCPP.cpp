@@ -74,12 +74,15 @@ int main()
 	LoadNextWave(gameWaveState, ennemyList, player);
 
 	std::map<int, sf::RectangleShape> bonusVisu;
-	bool hasChooseBonus = true;
-	bool hasDrawBonus = false;
+
+	
 
 	while (window.isOpen())
 	{
-		// Inputs
+		sf::Time waveElapsedTime = waveTimer.getElapsedTime();
+
+		//std::cout << "bonusTime: " << gameWaveState.bonusTime << std::endl;
+		// INPUTS
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -89,31 +92,38 @@ int main()
 				window.close();
 				break;
 			case sf::Event::MouseButtonPressed:
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-				{
-					while (hasChooseBonus == false)
-					{
-
-					}
-
-				}
+				break;
 			default:
 				break;
 			}
 		}
 
+		//close on ESCAPE
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
 			window.close();
 		}
 
+		//restart with SPACE
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && player.isAlive == false)
 		{
 			RestartGame(player, gameWaveState, ennemyList);
 		}
 
-		// Logique
-		sf::Time waveElapsedTime = waveTimer.getElapsedTime();
+		//bonus select with U, I, O
+		if (gameWaveState.bonusTime)
+		{
+			gameWaveState.bonusTime = SelectBonus(availablePowerUp, player);
+
+			if (!gameWaveState.bonusTime)
+			{
+				gameWaveState.waveNumber += 1;
+			}
+		}
+
+		// LOGIQUE
+		
+
 		if (player.isAlive)
 		{
 
@@ -139,8 +149,6 @@ int main()
 				}
 			}
 
-			/*std::cout << waveElapsedTime.asSeconds() - gameWaveState.waveWaitTime << std::endl;*/
-
 			//start between wave waiting time
 			if (ennemyList.size() == 0 && gameWaveState.waveRunning) {
 				waveElapsedTime = waveTimer.restart();
@@ -148,28 +156,25 @@ int main()
 				std::cout << "fin de vague" << std::endl;
 
 			}
+
 			//load next wave and start it
-			else if ((waveElapsedTime.asSeconds() >= gameWaveState.waveWaitTime) && (gameWaveState.waveRunning == false))
+			else if (waveElapsedTime.asSeconds() >= gameWaveState.waveWaitTime && gameWaveState.waveRunning == false)
 			{
 
-				if ((gameWaveState.waveNumber % 2 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasDrawBonus)
+				if (gameWaveState.waveNumber % 5 == 0 && gameWaveState.waveNumber != 0 && !gameWaveState.bonusTime)
 				{
 					availablePowerUp = LoadBonusTime(enumSize);
-
-					hasDrawBonus = true;
-					hasChooseBonus = false;
 
 					gameWaveState.bonusTime = true;
 
 					waveElapsedTime = waveTimer.restart();
 					std::cout << "bonus time!" << std::endl;
 				}
+
 				else if (!gameWaveState.bonusTime)
 				{
 					waveElapsedTime = waveTimer.restart();
 					std::cout << "debut de vague" << std::endl;
-
-					hasDrawBonus = false;
 
 					gameWaveState.waveRunning = LoadNextWave(gameWaveState, ennemyList, player);
 				}
@@ -233,12 +238,12 @@ int main()
 
 		if (player.isAlive)
 		{
-			if (gameWaveState.bonusTime)
+			if (!gameWaveState.bonusTime)
 			{
 				window.draw(player.circle);
 			}
 			
-
+			//render ennemies
 			for (SphereEnnemy& oneEnnemy : ennemyList) {
 				window.draw(oneEnnemy.shape);
 			}
@@ -247,7 +252,7 @@ int main()
 			window.draw(shieldText);
 			window.draw(waveText);
 			
-			if ((gameWaveState.waveNumber % 2 == 0 && gameWaveState.waveNumber != 0) && (gameWaveState.bonusTime) && !hasChooseBonus)
+			if (gameWaveState.bonusTime)
 			{
 				//affichage du texte choix bonus
 				window.draw(BonusText);

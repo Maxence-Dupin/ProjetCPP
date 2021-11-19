@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <map>
 #include "Player.hpp"
+#include "WaveManagement.hpp"
 #include "BonusManager.hpp"
 
 std::map<int, POWER_UP> LoadBonusTime(int enumSize)//choose 3 powerup
@@ -32,55 +33,87 @@ std::map<int, POWER_UP> LoadBonusTime(int enumSize)//choose 3 powerup
 	}
 
 	return availablePowerUps;
-
 }
 
 
 void SizeDown(Player& player)
 {
-	std::cout << player.radius << " --> ";
-	player.radius -= (player.radius * 15) / 100;
-	player.circle.setRadius(player.radius);
-	std::cout << player.radius;
+	if (player.radius <= 18.f)
+	{
+		player.radius -= (player.radius * 15) / 100;
+		player.circle.setRadius(player.radius);
+	}
 }
 
 void SpeedBonus(Player& player)
 {
-	std::cout << player.speed << " --> ";
-	player.speed += 50;
-	std::cout << player.speed;
+	if (player.speed <= 400.f)
+		player.speed += 50.f;
 }
 
 void LifeUp (Player& player)
 {
-	player.hp += 1;
+	if (player.hp < 3)
+		player.hp += 1;
 }
 void ShieldUp(Player& player)
-{
-	player.maxShield += 5;
+{	
+	if (player.shield < 3)
+		player.shield = 3;
 }
 
-void applyBonus(std::map<int, sf::RectangleShape> bonusVisu, int number, Player& player)
+void ApplyBonus(int number, Player& player)
 {
-	if (bonusVisu[number].getOutlineColor() == sf::Color::Green)
+	switch (number)
 	{
-		SizeDown(player);
-		std::cout << "Size Down Player";
-	}
-	if (bonusVisu[number].getOutlineColor() == sf::Color::Yellow)
-	{
-		SpeedBonus(player);
-		std::cout << "Speed UP";
-	}
-	if (bonusVisu[number].getOutlineColor() == sf::Color::Red)
-	{
+	case POWER_UP::LIFE_UP:
 		LifeUp(player);
-		std::cout << "Life++";
-	}
-	if (bonusVisu[number].getOutlineColor() == sf::Color::Blue)
-	{
+		break;
+	case POWER_UP::SHIELD_UP:
 		ShieldUp(player);
-		std::cout << "Shield ++";
+		break;
+	case POWER_UP::SIZE_DOWN:
+		SizeDown(player);
+		break;
+	case POWER_UP::SPEED_UP:
+		SpeedBonus(player);
+		break;
+	default:
+		break;
 	}
+}
+
+bool SelectBonus(std::map<int, POWER_UP> availablePowerUp, Player& player) 
+{
+	auto it = availablePowerUp.begin();
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U))//bonus left
+	{
+		ApplyBonus(it->second, player);
+
+		return false;
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))//bonus center
+	{
+		for(int i = 0; i < 1; i++)
+			it++;
+
+		if(it != availablePowerUp.end())
+			ApplyBonus(it->second, player);
+
+		return false;
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::O))//bonus right
+	{
+		for (int i = 0; i < 2; i++)
+			it++;
+
+		if (it != availablePowerUp.end())
+			ApplyBonus(it->second, player);
+
+		return false;
+	}
+	else
+		return true;
 }
 
