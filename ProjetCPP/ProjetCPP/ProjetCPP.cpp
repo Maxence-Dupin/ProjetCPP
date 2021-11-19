@@ -28,7 +28,7 @@ int main()
 	player.pos._x = 400.0f;
 	player.pos._y = 400.0f;
 	player.color = sf::Color::White;
-	SetUpPlayer(player, 25.0f, 300.0f);
+	SetUpPlayer(player, 35.0f, 300.0f);
 
 	sf::Clock clock;
 	sf::Clock waveTimer;
@@ -61,6 +61,10 @@ int main()
 	BonusText.setString("CLIQUEZ SUR UN BONUS");
 	BonusText.setFont(pixelated);
 	BonusText.setCharacterSize(50);
+	sf::Text scoreText;
+	scoreText.setPosition(220, 150);
+	scoreText.setFont(pixelated);
+	scoreText.setCharacterSize(120);
 
 
 
@@ -211,7 +215,6 @@ int main()
 			}
 
 			sf::Time time = player.clock.getElapsedTime();
-			std::cout << time.asMilliseconds() - player.lastHit << std:: endl;
 			//changement de couleur du player si en phase d'invincibilité
 			if (time.asMilliseconds() - player.lastHit + 300 < player.invincibleTime)
 			{
@@ -227,6 +230,7 @@ int main()
 		UpdateHP(player, hpText);
 		UpdateShield(player, shieldText);
 		UpdateWave(gameWaveState.waveNumber, waveText);
+		UpdateWave(gameWaveState.waveNumber, scoreText);
 
 		window.clear();
 
@@ -265,6 +269,7 @@ int main()
 		else
 		{
 			window.draw(gameOverText);
+			window.draw(scoreText);
 		}
 
 		window.display();

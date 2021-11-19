@@ -112,7 +112,7 @@ std::map<int, sf::RectangleShape> setUpBonusVisu(std::map<int, POWER_UP> current
 void SizeDown(Player& player)
 {
 	std::cout << player.radius << " --> ";
-	player.radius -= (player.radius * 15) / 100;
+	player.radius -= 5.0f;
 	player.circle.setRadius(player.radius);
 	std::cout << player.radius;
 }
@@ -126,11 +126,12 @@ void SpeedBonus(Player& player)
 
 void LifeUp (Player& player)
 {
-	player.hp += 1;
+	player.hp += 2;
 }
+
 void ShieldUp(Player& player)
 {
-	player.maxShield += 5;
+	player.maxShield += 1;
 }
 
 void applyBonus(std::map<int, sf::RectangleShape> bonusVisu, int number, Player& player)
