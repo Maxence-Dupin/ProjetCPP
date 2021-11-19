@@ -242,16 +242,7 @@ int main()
 			{
 			window.draw(bonusVisu[i]);
 			}
-
-		//affichage structure visuelle d'un bonus
-		BonusVisual visualToDraw = ShieldUpDraw(200.f, 300.f);
-
-		window.draw(visualToDraw.bonusFrame);
-		window.draw(visualToDraw.bonusCircle);
-
-		for (sf::ConvexShape oneComponent : visualToDraw.bonusShape) {
-			window.draw(oneComponent);
-		}
+		
 
 			window.draw(hpText);
 			window.draw(shieldText);

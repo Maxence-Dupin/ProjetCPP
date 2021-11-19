@@ -13,17 +13,18 @@ BonusVisual CircleAndFrameDraw(BonusVisual bonusVisual, float posX, float posY, 
 
 	// - - - FRAME 
 	bonusFrame.setSize(sf::Vector2f(120, 180));
-	bonusFrame.setOutlineThickness(3.f);
+	bonusFrame.setOutlineThickness(5.f);
 	bonusFrame.setOutlineColor(color);
 	bonusFrame.setFillColor(sf::Color::Transparent);
 	bonusFrame.setOrigin(bonusFrame.getSize() / 2.f);
 	bonusFrame.setPosition(posX, posY);
+	bonusFrame.rotate(10);
 
 
 	// - - - CIRCLE
 	float radius = 30.f;
 	bonusCircle.setRadius(radius);
-	bonusCircle.setOutlineThickness(3.f);
+	bonusCircle.setOutlineThickness(5.f);
 	bonusCircle.setOutlineColor(color);
 	bonusCircle.setFillColor(sf::Color::Transparent);
 
@@ -35,6 +36,38 @@ BonusVisual CircleAndFrameDraw(BonusVisual bonusVisual, float posX, float posY, 
 
 	return bonusVisual;
 }
+
+void DrawBonus(sf::RenderWindow& window, float posX, float posY, int bonusNumber)
+{
+	BonusVisual visualToDraw;
+
+	switch (bonusNumber)
+	{
+	case 0:
+		visualToDraw = HealBonusDraw(posX, posY);
+		break;
+	case 1:
+		visualToDraw = SizeDownDraw(posX, posY);
+		break;
+	case 2:
+		visualToDraw = SpeedUpDraw(posX, posY);	
+		break;
+	case 3:
+		visualToDraw = ShieldUpDraw(posX, posY);
+		break;
+	default:
+		break;
+	}
+	 
+
+	window.draw(visualToDraw.bonusFrame);
+	window.draw(visualToDraw.bonusCircle);
+
+	for (sf::ConvexShape oneComponent : visualToDraw.bonusShape) {
+		window.draw(oneComponent);
+	}
+}
+
 
 BonusVisual HealBonusDraw(float posX, float posY) 
 {
