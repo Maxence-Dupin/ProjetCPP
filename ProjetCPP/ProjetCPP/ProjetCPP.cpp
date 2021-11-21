@@ -23,7 +23,7 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Esquivate", sf::Style::Default, settings);
 	window.setVerticalSyncEnabled(true);
 
-
+	//Initialisation du player
 	Player player;
 	player.pos._x = 400.0f;
 	player.pos._y = 400.0f;

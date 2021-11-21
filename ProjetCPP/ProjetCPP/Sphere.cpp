@@ -212,6 +212,7 @@ float vecNorme(sf::Vector2f vector) {
 	return sqrt(vector.x * vector.x + vector.y * vector.y);
 }
 
+//fonction de détection de collisions entre les ennemis et le Player
 void Collisions(SphereEnnemy& ennemy, Player& player)
 {
 	sf::Vector2f ennemyPos = ennemy.shape.getPosition();
@@ -224,10 +225,10 @@ void Collisions(SphereEnnemy& ennemy, Player& player)
 	float dy = ennemyPosY - playerPosY + ennemy.shape.getRadius() - player.circle.getRadius();
 	float distance = sqrt(dx * dx + dy * dy);
 
-	if (distance < ennemy.shape.getRadius() + ennemy.shape.getOutlineThickness() + player.circle.getRadius())
+	if (distance < ennemy.shape.getRadius() + ennemy.shape.getOutlineThickness() + player.circle.getRadius()) // détection de si collision avec l'ennemi entré en paramètre
 	{
 		player.newHit = (float)clock();
-		if (player.newHit - player.lastHit > player.invincibleTime && player.isInvincible == true)
+		if (player.newHit - player.lastHit > player.invincibleTime && player.isInvincible == true) // vérification de si le temps d'invincibilité est passé ou non
 		{
 			player.isInvincible == false;
 			player.lastHit = player.newHit;

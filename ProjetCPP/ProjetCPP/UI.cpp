@@ -5,6 +5,7 @@
 #include "UI.hpp"
 #include "Player.hpp"
 
+// fonction récupérant le chemin du dossier assets dans les dossiers Debug ou Release
 std::string getAssetsPath()
 {
     char cExeFilePath[256];
@@ -16,6 +17,7 @@ std::string getAssetsPath()
     return assetsPath;
 }
 
+// fonction récupérant le chemin du dossier assets à la racine du projet C++
 std::string getAssetsPathFromRoot()
 {
     char cExeFilePath[256];
@@ -29,6 +31,10 @@ std::string getAssetsPathFromRoot()
     //std::cout << assetsPath << std::endl;
     return assetsPath;
 }
+
+
+
+//Fonctions pour update les textes en jeu
 
 void UpdateHP(Player& player, sf::Text& text)
 {
